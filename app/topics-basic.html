@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>专题 · 基础语法 · 编程竞赛笔记</title>
+  <link rel="icon" type="image/x-icon" href="icon.ico">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="site-header">
+    <div class="inner">
+      <a class="brand" href="index.html"><img class="brand-ico" src="icon.ico" alt="">编程竞赛笔记</a>
+      <nav class="site-nav">
+        <a href="index.html">首页</a>
+        <a href="day1.html">day1</a>
+        <a href="day2.html">day2</a>
+        <a href="day3.html">day3</a>
+        <a href="dfs-bfs.html">day4</a>
+        <div class="nav-drop">
+          <span class="nav-drop-btn">其他 ▾</span>
+          <div class="drop-menu">
+            <a href="topics-basic.html" class="active">基础语法</a>
+            <a href="topics-algo.html">基础算法</a>
+            <a href="topics-string.html">字符串</a>
+            <a href="topics-dp.html">动态规划</a>
+            <a href="stl-containers.html">STL容器</a>
+            <a href="topics-graph.html">图论</a>
+            <a href="topics-math.html">数学</a>
+            <a href="topics-round.html">周赛题解</a>
+            <a href="topics-prelim.html">初赛篇</a>
+            <a href="summary.html">学习总结</a>
+          </div>
+        </div>
+      </nav>
+    </div>
+  </header>
+
+  <main class="main"><nav class="crumb"><a href="index.html">首页</a><span class="sep">›</span><span>专题 · 基础语法</span></nav>
+    <div class="hero"><span class="hero-ico">🧱</span><h1>专题 · 基础语法</h1><p class="subtitle">一维数组 · 二维数组与蛇形方阵 · 字符串基础语法 · 计数与打标记 · 环状字符串的取模处理</p></div>
+
+    <h2>一、一维数组</h2>
+    <div class="card">
+      <p class="lead">数组是<b>连续内存的相同类型元素集合</b>，下标从 0 开始。竞赛常开成全局定长数组（<code>int a[N]</code>），并习惯用 1 下标书写，越界风险低、好对齐题意。</p>
+      <div class="table-wrap"><table>
+        <thead><tr><th>操作</th><th>写法 / 要点</th></tr></thead>
+        <tbody>
+          <tr><td>定义</td><td><code>int a[100005];</code>；全局数组默认初始化为 0，局部数组必须手动清零</td></tr>
+          <tr><td>读入</td><td>双层循环即可 <code>for (int i=1;i&lt;=n;i++) cin&gt;&gt;a[i];</code></td></tr>
+          <tr><td>遍历</td><td>下标遍历 <code>for (int i=0;i&lt;n;i++)</code>；范围 for <code>for (int x : a)</code></td></tr>
+          <tr><td>累加 / 最值</td><td>先初始化再累加；求和注意范围，必要时换 <code>long long</code></td></tr>
+        </tbody>
+      </table></div>
+      <pre class="codebox"><code>#include &lt;bits/stdc++.h&gt;
+using namespace std;
+const int N = 100005;
+int a[N];
+
+int main() {
+    int n; cin &gt;&gt; n;
+    for (int i = 1; i &lt;= n; i++) cin &gt;&gt; a[i];   // 1 下标，竞赛常用
+    long long sum = 0;
+    for (int i = 1; i &lt;= n; i++) sum += a[i];   // 累加注意范围
+    int mn = a[1], mx = a[1];
+    for (int i = 1; i &lt;= n; i++) {
+        mn = min(mn, a[i]);
+        mx = max(mx, a[i]);
+    }
+    cout &lt;&lt; sum &lt;&lt; " " &lt;&lt; mn &lt;&lt; " " &lt;&lt; mx &lt;&lt; "\n";
+    return 0;
+}</code></pre>
+      <div class="tip">全局大数组（如 10⁶ 以上）避免开在 <code>main</code> 内部栈上，否则会栈溢出，应放函数外做全局变量。</div>
+    </div>
+
+    <h2>二、二维数组</h2>
+    <div class="card">
+      <p class="lead">二维数组是「数组的数组」，对应矩阵，用 <code>a[i][j]</code> 访问第 i 行第 j 列。未显式初始化的元素自动为 0。</p>
+      <div class="table-wrap"><table>
+        <thead><tr><th>操作</th><th>写法 / 要点</th></tr></thead>
+        <tbody>
+          <tr><td>定义</td><td><code>int a[105][105];</code>；初始化 <code>{{1,2,3},{4,5,6}}</code>，只写前面则其余补 0</td></tr>
+          <tr><td>行遍历</td><td>固定行号 i，遍历列 j：<code>for (int j=1;j&lt;=m;j++) a[i][j]</code></td></tr>
+          <tr><td>列遍历</td><td>固定列号 j，遍历行 i：<code>for (int i=1;i&lt;=n;i++) a[i][j]</code></td></tr>
+          <tr><td>边缘判断</td><td><code>i==1 || i==n || j==1 || j==m</code></td></tr>
+          <tr><td>矩阵转置</td><td><code>b[j][i] = a[i][j]</code>，行列互换</td></tr>
+        </tbody>
+      </table></div>
+      <pre class="codebox"><code>#include &lt;bits/stdc++.h&gt;
+using namespace std;
+const int N = 105;
+int a[N][N];
+
+int main() {
+    int n, m; cin &gt;&gt; n &gt;&gt; m;
+    for (int i = 1; i &lt;= n; i++)
+        for (int j = 1; j &lt;= m; j++) cin &gt;&gt; a[i][j];
+    long long rowSum = 0;
+    for (int j = 1; j &lt;= m; j++) rowSum += a[1][j];      // 第 1 行
+    long long colSum = 0;
+    for (int i = 1; i &lt;= n; i++) colSum += a[i][1];      // 第 1 列
+    long long edge = 0;
+    for (int i = 1; i &lt;= n; i++)
+        for (int j = 1; j &lt;= m; j++)
+            if (i == 1 || i == n || j == 1 || j == m) edge += a[i][j];
+    cout &lt;&lt; rowSum &lt;&lt; " " &lt;&lt; colSum &lt;&lt; " " &lt;&lt; edge &lt;&lt; "\n";
+    return 0;
+}</code></pre>
+    </div>
+
+    <h2>三、蛇形方阵与方向数组</h2>
+    <div class="card">
+      <p class="lead">蛇形（螺旋）方阵是「按方向走、碰壁就转向」的典型模拟。核心套路是<b>方向数组 + 越界/已填检测</b>：定义上/下/左/右四个方向的位移量，每走一步前检查下一步是否合法，不合法就顺时针转向。</p>
+      <div class="table-wrap"><table>
+        <thead><tr><th>方向</th><th>dx（行变化）</th><th>dy（列变化）</th></tr></thead>
+        <tbody>
+          <tr><td>右</td><td>0</td><td>+1</td></tr>
+          <tr><td>下</td><td>+1</td><td>0</td></tr>
+          <tr><td>左</td><td>0</td><td>-1</td></tr>
+          <tr><td>上</td><td>-1</td><td>0</td></tr>
+        </tbody>
+      </table></div>
+      <pre class="codebox"><code>#include &lt;bits/stdc++.h&gt;
+using namespace std;
+const int N = 20;
+int a[N][N];
+int dx[4] = {0, 1, 0, -1};   // 右、下、左、上
+int dy[4] = {1, 0, -1, 0};
+
+int main() {
+    int n; cin &gt;&gt; n;
+    int x = 1, y = 1, dir = 0;
+    for (int num = 1; num &lt;= n * n; num++) {
+        a[x][y] = num;
+        if (num == n * n) break;              // 填完最后一格即停
+        int nx = x + dx[dir], ny = y + dy[dir];
+        while (nx &lt; 1 || nx &gt; n || ny &lt; 1 || ny &gt; n || a[nx][ny] != 0) {
+            dir = (dir + 1) % 4;             // 越界或已填就转向
+            nx = x + dx[dir]; ny = y + dy[dir];
+        }
+        x = nx; y = ny;
+    }
+    for (int i = 1; i &lt;= n; i++, cout &lt;&lt; "\n")
+        for (int j = 1; j &lt;= n; j++) cout &lt;&lt; setw(3) &lt;&lt; a[i][j];
+    return 0;
+}</code></pre>
+      <div class="note">方向数组 <code>dx/dy</code> 是通用工具：网格题、迷宫、走格子、八连通判断都靠它，把「四个方向」写成循环而不是四遍 if。</div>
+    </div>
+
+    <h2>四、字符串基础语法</h2>
+    <div class="card">
+      <p class="lead"><code>string</code> 可看成 <code>char</code> 的可变长数组，支持下标访问、拼接、比较（字典序）。更全的函数清单见 STL 容器专题，这里只记语法要点。</p>
+      <div class="table-wrap"><table>
+        <thead><tr><th>类别</th><th>写法</th><th>说明</th></tr></thead>
+        <tbody>
+          <tr><td>拼接</td><td><code>s + t</code> / <code>s + char</code></td><td>返回新字符串，不修改原串</td></tr>
+          <tr><td>长度</td><td><code>s.size()</code> / <code>s.length()</code></td><td>返回无符号整数</td></tr>
+          <tr><td>查找</td><td><code>s.find("xx")</code></td><td>返回首次出现下标；找不到返回 <code>string::npos</code></td></tr>
+          <tr><td>截取</td><td><code>s.substr(pos, len)</code></td><td>从 pos 起取 len 个；省略 len 则取到末尾</td></tr>
+          <tr><td>反转 / 排序</td><td><code>reverse(begin,end)</code> / <code>sort(begin,end)</code></td><td>直接改原串，返回 void</td></tr>
+          <tr><td>类型转换</td><td><code>to_string(n)</code>、<code>stoi(s)</code>、<code>stoll(s)</code></td><td>数字↔字符串</td></tr>
+          <tr><td>整行输入</td><td><code>getline(cin, s)</code></td><td>读含空格的一行；先 <code>cin.ignore()</code> 清掉残留换行</td></tr>
+        </tbody>
+      </table></div>
+      <pre class="codebox"><code>#include &lt;bits/stdc++.h&gt;
+using namespace std;
+
+int main() {
+    string s = "hello";
+    string g = s + " " + "world";        // 拼接
+    cout &lt;&lt; g &lt;&lt; " len=" &lt;&lt; g.size() &lt;&lt; "\n";
+    int p = g.find("world");              // 查找
+    if (p != string::npos) cout &lt;&lt; g.substr(p, 5) &lt;&lt; "\n";   // 截取
+    reverse(g.begin(), g.end());          // 反转
+    int x = stoi("1234");                 // 字符串转整数
+    string u = to_string(12) + "34";     // 整数转字符串
+    for (char &amp;c : s) c = toupper(c);     // 改字符要加引用
+    cout &lt;&lt; s &lt;&lt; " " &lt;&lt; x &lt;&lt; " " &lt;&lt; u &lt;&lt; "\n";
+    return 0;
+}</code></pre>
+      <div class="tip">字符串比较 <code>&lt; &gt; ==</code> 默认按<b>字典序</b>（逐位比 ASCII）：<code>'0'~'9' &lt; 'A'~'Z' &lt; 'a'~'z'</code>，前缀相同则短的更小。</div>
+    </div>
+
+    <h2>五、字符串计数与打标记</h2>
+    <div class="card">
+      <p class="lead">面对「统计字符出现几次 / 某个字母是否出现过」这类问题，开一个<b>计数数组</b>即可：用 <code>c - 'a'</code> 把字符映射成下标，遍历一遍字符串完成统计，O(n) 且空间 O(1)。</p>
+      <div class="table-wrap"><table>
+        <thead><tr><th>映射</th><th>下标范围</th><th>适用</th></tr></thead>
+        <tbody>
+          <tr><td><code>c - 'a'</code></td><td>0~25</td><td>小写字母</td></tr>
+          <tr><td><code>c - 'A'</code></td><td>0~25</td><td>大写字母</td></tr>
+          <tr><td><code>c - '0'</code></td><td>0~9</td><td>数字字符转真实数字</td></tr>
+          <tr><td><code>c</code>（ASCII）</td><td>0~127</td><td>通用字符 / 打标记</td></tr>
+        </tbody>
+      </table></div>
+      <pre class="codebox"><code>#include &lt;bits/stdc++.h&gt;
+using namespace std;
+int cnt[26];          // cnt[i]: 字母 i 出现的次数
+bool seen[26];        // seen[i]: 字母 i 是否出现过
+
+int main() {
+    string s; cin &gt;&gt; s;
+    for (char c : s) {
+        cnt[c - 'a']++;          // 字符映射到下标 0~25
+        seen[c - 'a'] = true;
+    }
+    for (int i = 0; i &lt; 26; i++)
+        if (seen[i]) cout &lt;&lt; char('a' + i) &lt;&lt; ":" &lt;&lt; cnt[i] &lt;&lt; " ";
+    cout &lt;&lt; "\n";
+    return 0;
+}</code></pre>
+      <div class="note">打标记与计数是同一套思路：<code>bool vis[]</code> 记「是否到过」，<code>int cnt[]</code> 记「到过几次」；大数按字符串逐位处理时用 <code>s[i] - '0'</code> 取出真正数字再运算。</div>
+    </div>
+
+    <h2>六、环状字符串与取模处理</h2>
+    <div class="card">
+      <p class="lead">当字符串被看作<b>环形</b>（末位接回首位）时，越界下标用<b>取模</b>回到开头：长度 n，第 k 个位置就是 <code>(start + k) % n</code>。星空一类「超大数只能当字符串处理」的题，则用逐位累加 <code>s[i] - '0'</code> 绕开整型范围限制。</p>
+      <pre class="codebox"><code>#include &lt;bits/stdc++.h&gt;
+using namespace std;
+
+int main() {
+    string s; cin &gt;&gt; s;
+    int start, m; cin &gt;&gt; start &gt;&gt; m;    // 从第 start 个字符起顺时针取 m 个
+    int n = s.size();
+    string out;
+    for (int i = 0; i &lt; m; i++)
+        out += s[(start - 1 + i) % n];  // 取模越过末尾回到开头
+    cout &lt;&lt; out &lt;&lt; "\n";
+    return 0;
+}</code></pre>
+      <div class="tip">下标取模的通用式 <code>(i + k) % n</code> 可直接平移环形位置；写成 <code>((i % n) + n) % n</code> 还能兼容负数下标，避免方向反向时出现负索引。</div>
+    </div>
+
+    <div class="tip"><b>速记</b>：数组定长开全局、用 1 下标；二维行/列遍历靠「固定一维」；走格子/螺旋用方向数组 dx/dy 碰壁转向；字符串记 find/substr/to_string；计数打标记靠 <code>c-'a'</code> 映射；环形一律取模 <code>% n</code>。</div>
+
+    <nav class="chapter-grid" style="margin-top:24px;">
+      <a class="chapter-card" href="index.html"><span class="tag">返回</span><h4>返回首页</h4><p>回到站点总览</p></a>
+      <a class="chapter-card" href="topics-algo.html"><span class="tag">下一专题</span><h4>基础算法</h4><p>模拟 · 枚举 · 排序 · 双指针</p></a>
+      <a class="chapter-card" href="summary.html"><span class="tag">汇总</span><h4>学习总结</h4><p>核心知识点一览 · 方法论</p></a>
+    </nav>
+
+    <nav class="pager"><a class="pager-next" href="index.html">返回首页 <span class="pg-ico">→</span></a></nav>
+  </main>
+
+  <footer class="site-footer">编程竞赛知识点与例题学习笔记</footer>
+  <script src="main.js"></script>
+</body>
+</html>

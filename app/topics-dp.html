@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>专题 · 动态规划 · 编程竞赛笔记</title>
+  <link rel="icon" type="image/x-icon" href="icon.ico">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="site-header">
+    <div class="inner">
+      <a class="brand" href="index.html"><img class="brand-ico" src="icon.ico" alt="">编程竞赛笔记</a>
+      <nav class="site-nav">
+        <a href="index.html">首页</a>
+        <a href="day1.html">day1</a>
+        <a href="day2.html">day2</a>
+        <a href="day3.html">day3</a>
+        <a href="dfs-bfs.html">day4</a>
+        <div class="nav-drop">
+          <span class="nav-drop-btn">其他 ▾</span>
+          <div class="drop-menu">
+            <a href="topics-basic.html">基础语法</a>
+            <a href="topics-algo.html">基础算法</a>
+            <a href="topics-string.html">字符串</a>
+            <a href="topics-dp.html" class="active">动态规划</a>
+            <a href="stl-containers.html">STL容器</a>
+            <a href="topics-graph.html">图论</a>
+            <a href="topics-math.html">数学</a>
+            <a href="topics-round.html">周赛题解</a>
+            <a href="topics-prelim.html">初赛篇</a>
+            <a href="summary.html">学习总结</a>
+          </div>
+        </div>
+      </nav>
+    </div>
+  </header>
+
+  <main class="main"><nav class="crumb"><a href="index.html">首页</a><span class="sep">›</span><span>专题 · 动态规划</span></nav>
+    <div class="hero"><span class="hero-ico">🧩</span><h1>专题 · 动态规划</h1><p class="subtitle">DP 入门心法 · 最长上升子序列 LIS（朴素 / 二分优化）· LIS 方案与方案数 · 最长公共子序列 LCS · 最长公共子串 · 变种速记</p></div>
+
+    <h2>一、DP 入门心法</h2>
+    <div class="card">
+      <p class="lead">动态规划的本质是「把大问题拆成重复的小问题，用一张表把小问题的答案存下来」。写对 DP 只需想清四件事：<b>状态定义 → 转移方程 → 初始化 → 遍历顺序</b>。</p>
+      <div class="table-wrap"><table>
+        <thead><tr><th>要素</th><th>要回答的问题</th><th>常见写法</th></tr></thead>
+        <tbody>
+          <tr><td>状态定义 dp[i]</td><td>这张表的每一项到底代表什么？</td><td>「以 i 结尾 / 前 i 个 / 到 i 为止」的值，务必一句话说清</td></tr>
+          <tr><td>转移方程</td><td>dp[i] 由哪些更小规模的状态推出？</td><td>枚举最后一步的所有决策，取 max / min / 求和</td></tr>
+          <tr><td>初始化</td><td>边界（i=0 / 空串 / 单独一个元素）是多少？</td><td>按题意赋 0 / 1 / 极大值，别漏边界</td></tr>
+          <tr><td>遍历顺序</td><td>填表时 i 该从左还是从右？</td><td>保证「用到的更小规模状态」已经算出来</td></tr>
+        </tbody>
+      </table></div>
+      <div class="tip"><b>自检口诀</b>：状态说不清 → 方程一定错；方程写得出 → 顺序和初始化再检查一遍。答案往往不是 dp[n]，要在整张表里取 max / 累加（如子序列类）。</div>
+      <div class="note">判断能不能用 DP：问题有<b>最优子结构</b>（大最优由小最优拼成）且<b>无后效性</b>（算出后不再被前面影响）。</div>
+    </div>
+
+    <h2>二、最长上升子序列 LIS</h2>
+    <div class="card">
+      <h3>状态设计（O(n²) 朴素）</h3>
+      <p class="lead"><b>f[i] = 以 a[i] 结尾的最长上升子序列长度</b>。转移：枚举所有 j &lt; i 且 a[j] &lt; a[i]，把 a[i] 接到后面。</p>
+      <div class="table-wrap"><table>
+        <thead><tr><th>项</th><th>内容</th></tr></thead>
+        <tbody>
+          <tr><td>转移方程</td><td>f[i] = max(f[i], f[j] + 1)，对所有 j &lt; i 且 a[j] &lt; a[i]</td></tr>
+          <tr><td>初始化</td><td>f[i] = 1（单独一个元素自身就是长度 1 的上升子序列）</td></tr>
+          <tr><td>答案</td><td>max(f[1..n])，不是 f[n]</td></tr>
+          <tr><td>复杂度</td><td>时间 O(n²)、空间 O(n)</td></tr>
+        </tbody>
+      </table></div>
+      <pre class="codebox"><code>#include &lt;bits/stdc++.h&gt;
+using namespace std;
+const int N = 5005;
+int n, a[N], f[N];
+
+int main() {
+    ios::sync_with_stdio(false), cin.tie(0);
+    cin &gt;&gt; n;
+    for (int i = 1; i &lt;= n; i++) cin &gt;&gt; a[i];
+    int ans = 0;
+    for (int i = 1; i &lt;= n; i++) {
+        f[i] = 1;                         // 至少长度为 1
+        for (int j = 1; j &lt; i; j++)
+            if (a[j] &lt; a[i])              // 严格上升
+                f[i] = max(f[i], f[j] + 1);
+        ans = max(ans, f[i]);
+    }
+    cout &lt;&lt; ans &lt;&lt; "\n";
+    return 0;
+}</code></pre>
+
+      <h3>O(n log n) 二分贪心优化</h3>
+      <p class="lead">维护辅助数组 <b>d[k] = 长度为 k 的上升子序列的「最小结尾值」</b>，d 始终单调递增。来了 a[i]：能接上（a[i] &gt; d[len]）就加长；否则用 <b>lower_bound</b> 找到第一个 ≥ a[i] 的位置替换成更小的结尾，给后续元素留出空间。</p>
+      <pre class="codebox"><code>#include &lt;bits/stdc++.h&gt;
+using namespace std;
+const int N = 200005;
+int n, a[N], d[N];   // d[k]: 长度为 k 的上升子序列的最小结尾值
+
+int main() {
+    ios::sync_with_stdio(false), cin.tie(0);
+    cin &gt;&gt; n;
+    int len = 0;
+    for (int i = 1; i &lt;= n; i++) {
+        cin &gt;&gt; a[i];
+        if (a[i] &gt; d[len]) {            // 能接在当前最长序列后面
+            d[++len] = a[i];
+        } else {                         // 找到第一个 &gt;= a[i] 的位置替换
+            int pos = lower_bound(d + 1, d + len + 1, a[i]) - d;
+            d[pos] = a[i];
+        }
+    }
+    cout &lt;&lt; len &lt;&lt; "\n";                // len 即为 LIS 长度
+    return 0;
+}</code></pre>
+      <div class="tip"><b>二分选型速记</b>：严格上升用 <b>lower_bound</b>（找 ≥ x 替换）；不下降（可相等）改用 <b>upper_bound</b>（找 &gt; x 替换）。下降类则把 d 改成维护「最大结尾」并用手写反向二分。</div>
+    </div>
+
+    <h2>三、LIS 的方案与方案数</h2>
+    <div class="card">
+      <h3>输出一组具体方案（前驱记录）</h3>
+      <p class="lead">在 DP 过程中多记一个前驱数组 <b>pre[i] = 转移到 i 的那个 j</b>。先找到 f[i] 等于最大长度的任意结尾位置，再沿 pre[i] 一路向前跳，收集后<b>倒序输出</b>，就还原出一条具体的 LIS。</p>
+      <pre class="codebox"><code>// 在 O(n^2) DP 中追加前驱记录
+for (int i = 1; i &lt;= n; i++) {
+    f[i] = 1;
+    for (int j = 1; j &lt; i; j++)
+        if (a[j] &lt; a[i] &amp;&amp; f[j] + 1 &gt; f[i]) {
+            f[i] = f[j] + 1;
+            pre[i] = j;                  // 记录上一个结尾是谁
+        }
+}
+// 还原：挑一个 f[i] == ans 的结尾 id，沿 pre 往前跳
+vector&lt;int&gt; path;
+for (int i = id; i &gt;= 1; i = pre[i]) path.push_back(a[i]);
+reverse(path.begin(), path.end());</code></pre>
+
+      <h3>统计方案数（计数）</h3>
+      <p class="lead">再加一维计数数组 <b>g[i] = 以 i 结尾的 LIS 的方案数</b>。转移时分两种情况：发现<b>更长</b>的子序列就把 g[i] 重置为 g[j]；发现<b>等长</b>的另一条路径就把 g[i] 累加 g[j]。最后对所有 f[i] == 最大长度的 g[i] 求和。</p>
+      <pre class="codebox"><code>// f[i]: 长度；g[i]: 以 i 结尾的 LIS 方案数
+for (int i = 1; i &lt;= n; i++) {
+    f[i] = 1, g[i] = 1;               // 每个元素自身是一条长为 1 的方案
+    for (int j = 1; j &lt; i; j++)
+        if (a[j] &lt; a[i]) {
+            if (f[j] + 1 &gt; f[i]) {
+                f[i] = f[j] + 1;
+                g[i] = g[j];           // 更长：重置为继承的方案数
+            } else if (f[j] + 1 == f[i]) {
+                g[i] += g[j];          // 等长：累加方案数
+            }
+        }
+}
+int sum = 0;
+for (int i = 1; i &lt;= n; i++)
+    if (f[i] == ans) sum += g[i];     // 所有达到最大长度的方案数相加</code></pre>
+      <div class="note">计数时要防重复：若存在值相同、长度相同的并列转移，需按题意决定是否去重；否则会把「同一位置的不同写法」算成多条方案。</div>
+    </div>
+
+    <h2>四、最长公共子序列 LCS</h2>
+    <div class="card">
+      <p class="lead"><b>f[i][j] = s[1..i] 与 t[1..j] 的最长公共子序列长度</b>（子序列<b>不要求连续</b>）。二维 DP，时间 O(nm)、空间 O(nm)。</p>
+      <div class="table-wrap"><table>
+        <thead><tr><th>情况</th><th>转移</th></tr></thead>
+        <tbody>
+          <tr><td>s[i] == t[j]</td><td>f[i][j] = f[i−1][j−1] + 1（两个字符都用上）</td></tr>
+          <tr><td>s[i] != t[j]</td><td>f[i][j] = max(f[i−1][j], f[i][j−1])（至少舍掉一个）</td></tr>
+          <tr><td>初始化</td><td>f[i][0] = f[0][j] = 0（空串公共子序列为 0）</td></tr>
+          <tr><td>答案</td><td>f[n][m]</td></tr>
+        </tbody>
+      </table></div>
+      <pre class="codebox"><code>#include &lt;bits/stdc++.h&gt;
+using namespace std;
+int f[2005][2005];
+
+int main() {
+    ios::sync_with_stdio(false), cin.tie(0);
+    string s, t; cin &gt;&gt; s &gt;&gt; t;
+    s = " " + s; t = " " + t;         // 垫空格，下标从 1 开始
+    int n = s.size() - 1, m = t.size() - 1;
+    for (int i = 1; i &lt;= n; i++)
+        for (int j = 1; j &lt;= m; j++) {
+            if (s[i] == t[j])
+                f[i][j] = f[i - 1][j - 1] + 1;
+            else
+                f[i][j] = max(f[i - 1][j], f[i][j - 1]);
+        }
+    cout &lt;&lt; f[n][m] &lt;&lt; "\n";
+    return 0;
+}</code></pre>
+      <h3>路径还原思路</h3>
+      <div class="tip">从 f[n][m] 出发反向走：若 s[i]==t[j] 则这个字符是公共字符，记下并跳到 (i−1, j−1)；否则往 f 值更大的方向（f[i−1][j] 与 f[i][j−1] 谁大走谁）退一步。收集到的字符再倒序即为一条具体 LCS。</div>
+    </div>
+
+    <h2>五、最长公共子串（连续版）</h2>
+    <div class="card">
+      <p class="lead"><b>子串要求字符连续</b>，与 LCS 的关键区别在于状态含义和「不匹配」的处理。f[i][j] = <b>s 以 i 结尾、t 以 j 结尾</b>的最长公共<b>子串</b>长度。</p>
+      <div class="table-wrap"><table>
+        <thead><tr><th>对比</th><th>LCS（子序列）</th><th>最长公共子串</th></tr></thead>
+        <tbody>
+          <tr><td>是否连续</td><td>不要求连续</td><td>必须连续</td></tr>
+          <tr><td>s[i] != t[j]</td><td>max(f[i−1][j], f[i][j−1])，延续</td><td><b>f[i][j] = 0</b>，连续链中断归零</td></tr>
+          <tr><td>答案</td><td>f[n][m]（右下角）</td><td>整张表里取 max（可能在中间）</td></tr>
+        </tbody>
+      </table></div>
+      <pre class="codebox"><code>// f[i][j]: s 以 i 结尾、t 以 j 结尾的最长公共子串长度
+int ans = 0;
+for (int i = 1; i &lt;= n; i++)
+    for (int j = 1; j &lt;= m; j++) {
+        if (s[i] == t[j])
+            f[i][j] = f[i - 1][j - 1] + 1;
+        else
+            f[i][j] = 0;             // 不匹配：连续链中断，归零
+        ans = max(ans, f[i][j]);     // 答案在全表取最大值
+    }</code></pre>
+    </div>
+
+    <h2>六、变种速记表</h2>
+    <div class="card">
+      <p class="lead">同一套「状态 + 二分 + 二维表」思路稍加改造即可覆盖下列变种，记住每个的<b>一句核心转换</b>即可。</p>
+      <div class="table-wrap"><table>
+        <thead><tr><th>变种</th><th>思路要点（一句概括）</th></tr></thead>
+        <tbody>
+          <tr><td>最长上升奇偶子序列</td><td>把上升条件改为相邻元素奇偶性交替（a[i] 与 a[j] 一奇一偶），其余转移与 LIS 完全相同。</td></tr>
+          <tr><td>排列的 LCS</td><td>两序列都是排列时，LCS 可<b>转化为 LIS</b>：把第二个排列映射成「位置」后，对原序列求 LIS 即可。</td></tr>
+          <tr><td>反向最长公共子序列</td><td>把其中一个序列反转后再求一次普通 LCS，本质仍是同一套二维 DP。</td></tr>
+          <tr><td>字母的最长公共子序列</td><td>限定只能用某几个字母 / 字符集时，先过滤掉无关字符，再对剩余串做标准 LCS。</td></tr>
+        </tbody>
+      </table></div>
+      <div class="tip"><b>方法迁移</b>：LIS 解决「单序列 + 顺序约束」，LCS 解决「双序列对齐」；遇到新题先判断属于哪一类，再套用对应模板微调比较条件。</div>
+    </div>
+
+    <nav class="chapter-grid" style="margin-top:24px;">
+      <a class="chapter-card" href="index.html"><span class="tag">返回</span><h4>返回首页</h4><p>回到站点总览</p></a>
+      <a class="chapter-card" href="summary.html"><span class="tag">汇总</span><h4>学习总结</h4><p>核心知识点一览 · 方法论</p></a>
+    </nav>
+
+    <nav class="pager"><a class="pager-next" href="index.html">返回首页 <span class="pg-ico">→</span></a></nav>
+  </main>
+
+  <footer class="site-footer">编程竞赛知识点与例题学习笔记</footer>
+  <script src="main.js"></script>
+</body>
+</html>

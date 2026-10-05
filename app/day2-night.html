@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>day2·晚上 —— 习题讲评 · 编程竞赛笔记</title>
+  <link rel="icon" type="image/x-icon" href="icon.ico">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="site-header">
+    <div class="inner">
+      <a class="brand" href="index.html"><img class="brand-ico" src="icon.ico" alt="">编程竞赛笔记</a>
+            <nav class="site-nav">
+        <a href="index.html">首页</a>
+        <a href="day1.html">day1</a>
+        <a href="day2.html" class="active">day2</a>
+        <a href="day3.html">day3</a>
+        <a href="dfs-bfs.html">day4</a>
+        <div class="nav-drop">
+          <span class="nav-drop-btn">其他 ▾</span>
+          <div class="drop-menu">
+            <a href="topics-basic.html">基础语法</a>
+            <a href="topics-algo.html">基础算法</a>
+            <a href="topics-string.html">字符串</a>
+            <a href="topics-dp.html">动态规划</a>
+            <a href="stl-containers.html">STL容器</a>
+            <a href="topics-graph.html">图论</a>
+            <a href="topics-math.html">数学</a>
+            <a href="topics-round.html">周赛题解</a>
+            <a href="topics-prelim.html">初赛篇</a>
+            <a href="summary.html">学习总结</a>
+          </div>
+        </div>
+      </nav>
+    </div>
+</header>
+
+  <main class="main"><nav class="crumb"><a href="index.html">首页</a><span class="sep">›</span><a href="day2.html">day2</a><span class="sep">›</span><span>晚上 · 习题讲评</span></nav>
+    <div class="hero"><span class="hero-ico">🌙</span><h1>day2 · 晚上 —— 习题讲评</h1><p class="subtitle">Plant 装箱 · 列队还原 · 格格临界 · 提高组难题（10/2 晚讲评）</p></div>
+
+    <h2>第一题 · Plant 装箱模拟</h2>
+    <div class="card">
+      <div class="table-wrap"><table>
+        <thead><tr><th>项</th><th>内容</th></tr></thead>
+        <tbody>
+          <tr><td>题目规则</td><td>流水线产品顺序固定不可调整；装箱需同时满足总重 ≤ C、个数 ≤ M，任一条件触发则打包新箱；输出所有箱子中总重量最大的箱重</td></tr>
+          <tr><td>解题思路</td><td>纯模拟遍历所有产品，维护当前箱子的总重量、总个数变量，触发装箱条件时重置变量（可用 i 减退实现逻辑）</td></tr>
+          <tr><td>复杂度</td><td>O(n)</td></tr>
+          <tr><td>易错点</td><td>必做最后一个箱子的特判，避免遗漏未打包的剩余产品；不可自行排序用贪心；最大值需在箱子打包完成后计算，避免变量重置后 0 值干扰</td></tr>
+        </tbody>
+      </table></div>
+    </div>
+
+    <h2>第二题 · 列队还原</h2>
+    <div class="card">
+      <div class="table-wrap"><table>
+        <thead><tr><th>项</th><th>内容</th></tr></thead>
+        <tbody>
+          <tr><td>题目规则</td><td>按给定位置插入还原队列</td></tr>
+          <tr><td>解题思路</td><td>用 list 的 insert 方法在指定位置插入，借助迭代器定位；题目数据范围仅 5000，暴力插入无性能问题</td></tr>
+          <tr><td>复杂度</td><td>O(n²)</td></tr>
+          <tr><td>易错点</td><td>字符串方案会让多位数字符导致整体位置偏移，仅能拿约 1/3 分数；插入位置需边界特判，若超出当前队列长度则直接插入队首；也可用数组整体后移、双端队列+栈实现</td></tr>
+        </tbody>
+      </table></div>
+    </div>
+
+    <h2>第三题 · 格格临界</h2>
+    <div class="card">
+      <h3>暴力解法（基础分）</h3>
+      <div class="table-wrap"><table>
+        <thead><tr><th>项</th><th>内容</th></tr></thead>
+        <tbody>
+          <tr><td>思路</td><td>四层遍历所有可能的 X、Y、Z 组合，直接判断 AI = AX + AY + AZ 是否成立</td></tr>
+          <tr><td>复杂度</td><td>O(n⁴)</td></tr>
+          <tr><td>说明</td><td>基础得分方案，可拿到约 40 分左右，无额外实现难度</td></tr>
+        </tbody>
+      </table></div>
+      <h3>哈希表优化（满分）</h3>
+      <div class="table-wrap"><table>
+        <thead><tr><th>项</th><th>内容</th></tr></thead>
+        <tbody>
+          <tr><td>思路</td><td>将等式变形为 AI - AX = AY + AZ，借助哈希表存储已出现的数值组合，降低遍历层级为两层循环</td></tr>
+          <tr><td>复杂度</td><td>O(n²) 平均</td></tr>
+          <tr><td>易错点</td><td>需保证所有参与计算的下标均小于当前遍历的 i；用 unordered_map 平均 O(1)，避免有序 map 耗时导致超时</td></tr>
+        </tbody>
+      </table></div>
+    </div>
+
+    <h2>第四题 · 提高组难题</h2>
+    <div class="card">
+      <div class="table-wrap"><table>
+        <thead><tr><th>项</th><th>内容</th></tr></thead>
+        <tbody>
+          <tr><td>难度</td><td>信息学提高组级别，逻辑较难理解</td></tr>
+          <tr><td>思路</td><td>需结合栈、贪心算法实现，用栈配合贪心维护最优解，把最小的数尽可能往前面放</td></tr>
+          <tr><td>说明</td><td>暂不做详细讲解；已准备对应逻辑的动图供自行理解，后续会安排专门时间展开</td></tr>
+        </tbody>
+      </table></div>
+    </div>
+
+    <div class="note">📌 当堂练习：完成前三道习题的代码编写与平台测试，可暴力或自定义数据结构实现；完成编写可提交代码供核验。</div>
+
+    <nav class="chapter-grid" style="margin-top:24px;">
+      <a class="chapter-card" href="day2.html"><span class="tag">返回</span><h4>day2 首页</h4></a>
+      <a class="chapter-card" href="topics.html"><span class="tag">相关</span><h4>day2 · 题目练习计划</h4></a>
+    </nav>
+  
+    <nav class="pager"><a class="pager-next" href="topics.html">下一页：day2 · 题目练习计划 <span class="pg-ico">→</span></a></nav>
+  </main>
+
+  <footer class="site-footer">编程竞赛知识点与例题学习笔记</footer>
+  <script src="main.js"></script>
+</body>
+</html>

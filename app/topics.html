@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>day2·题目练习计划 · 编程竞赛笔记</title>
+  <link rel="icon" type="image/x-icon" href="icon.ico">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="site-header">
+    <div class="inner">
+      <a class="brand" href="index.html"><img class="brand-ico" src="icon.ico" alt="">编程竞赛笔记</a>
+            <nav class="site-nav">
+        <a href="index.html">首页</a>
+        <a href="day1.html">day1</a>
+        <a href="day2.html" class="active">day2</a>
+        <a href="day3.html">day3</a>
+        <a href="dfs-bfs.html">day4</a>
+        <div class="nav-drop">
+          <span class="nav-drop-btn">其他 ▾</span>
+          <div class="drop-menu">
+            <a href="topics-basic.html">基础语法</a>
+            <a href="topics-algo.html">基础算法</a>
+            <a href="topics-string.html">字符串</a>
+            <a href="topics-dp.html">动态规划</a>
+            <a href="stl-containers.html">STL容器</a>
+            <a href="topics-graph.html">图论</a>
+            <a href="topics-math.html">数学</a>
+            <a href="topics-round.html">周赛题解</a>
+            <a href="topics-prelim.html">初赛篇</a>
+            <a href="summary.html">学习总结</a>
+          </div>
+        </div>
+      </nav>
+    </div>
+</header>
+
+  <main class="main"><nav class="crumb"><a href="index.html">首页</a><span class="sep">›</span><a href="day2.html">day2</a><span class="sep">›</span><span>题目练习计划</span></nav>
+    <div class="hero"><span class="hero-ico">📋</span><h1>day2 · 题目练习计划</h1><p class="subtitle">20 道练习题（栈、队列、集合、前缀和、差分、NOIP / USACO、贪心等），可按甘特图排期练习</p></div>
+
+    <h2>类别分布</h2>
+    <div class="card">
+      <div class="barchart">
+        <div class="bar-row"><span class="b-label">前缀和</span><div class="b-track"><div class="b-fill" style="width:100%">5</div></div><span class="b-num">5</span></div>
+        <div class="bar-row"><span class="b-label">NOIP</span><div class="b-track"><div class="b-fill" style="width:60%">3</div></div><span class="b-num">3</span></div>
+        <div class="bar-row"><span class="b-label">差分</span><div class="b-track"><div class="b-fill" style="width:60%">3</div></div><span class="b-num">3</span></div>
+        <div class="bar-row"><span class="b-label">队列</span><div class="b-track"><div class="b-fill" style="width:40%">2</div></div><span class="b-num">2</span></div>
+        <div class="bar-row"><span class="b-label">贪心</span><div class="b-track"><div class="b-fill" style="width:40%">2</div></div><span class="b-num">2</span></div>
+        <div class="bar-row"><span class="b-label">栈</span><div class="b-track"><div class="b-fill" style="width:20%">1</div></div><span class="b-num">1</span></div>
+        <div class="bar-row"><span class="b-label">集合</span><div class="b-track"><div class="b-fill" style="width:20%">1</div></div><span class="b-num">1</span></div>
+        <div class="bar-row"><span class="b-label">模拟</span><div class="b-track"><div class="b-fill" style="width:20%">1</div></div><span class="b-num">1</span></div>
+        <div class="bar-row"><span class="b-label">USACO</span><div class="b-track"><div class="b-fill" style="width:20%">1</div></div><span class="b-num">1</span></div>
+        <div class="bar-row"><span class="b-label">小学组</span><div class="b-track"><div class="b-fill" style="width:20%">1</div></div><span class="b-num">1</span></div>
+      </div>
+      <div class="tip">💡 大白话：20 道题按类型分了 10 类。<strong>前缀和最多（5 道）</strong>，其次是 NOIP、差分（各 3 道），栈、集合、模拟、USACO、小学组都只有 1 道。</div>
+    </div>
+
+    <h2>题目清单（可点击类别筛选）</h2>
+    <div class="filterbar" id="topic-filter">
+      <button data-cat="全部" class="active">全部</button>
+      <button data-cat="栈">栈</button>
+      <button data-cat="队列">队列</button>
+      <button data-cat="集合">集合</button>
+      <button data-cat="NOIP">NOIP</button>
+      <button data-cat="贪心">贪心</button>
+      <button data-cat="前缀和">前缀和</button>
+      <button data-cat="模拟">模拟</button>
+      <button data-cat="差分">差分</button>
+      <button data-cat="USACO">USACO</button>
+      <button data-cat="小学组">小学组</button>
+    </div>
+    <div class="card"><div class="table-wrap"><table id="topic-table">
+      <thead><tr><th>题目</th><th>类别</th></tr></thead>
+      <tbody>
+        <tr data-cat="栈"><td>B3614【模板】栈</td><td>栈</td></tr>
+        <tr data-cat="队列"><td>B3616【模板】队列</td><td>队列</td></tr>
+        <tr data-cat="队列"><td>1042[模板]双端队列</td><td>队列</td></tr>
+        <tr data-cat="NOIP"><td>1043[NOIP2007提高组]统计数字</td><td>NOIP</td></tr>
+        <tr data-cat="集合"><td>1044[模板]集合(set)</td><td>集合</td></tr>
+        <tr data-cat="贪心"><td>906排队接水</td><td>贪心</td></tr>
+        <tr data-cat="NOIP"><td>P1090[NOIP2004提高组]合并果子</td><td>NOIP</td></tr>
+        <tr data-cat="贪心"><td>P1230智力大冲浪</td><td>贪心</td></tr>
+        <tr data-cat="前缀和"><td>908[模板]一维前缀和</td><td>前缀和</td></tr>
+        <tr data-cat="前缀和"><td>P3406海底高铁</td><td>前缀和</td></tr>
+        <tr data-cat="模拟"><td>P1318积水面积</td><td>模拟</td></tr>
+        <tr data-cat="前缀和"><td>P2004领地选择</td><td>前缀和</td></tr>
+        <tr data-cat="前缀和"><td>P2280[HNOI2003]激光炸弹</td><td>前缀和</td></tr>
+        <tr data-cat="前缀和"><td>P1719最大加权矩形</td><td>前缀和</td></tr>
+        <tr data-cat="差分"><td>914[模板]一维差分</td><td>差分</td></tr>
+        <tr data-cat="NOIP"><td>P5019[NOIP2018提高组]铺设道路</td><td>NOIP</td></tr>
+        <tr data-cat="USACO"><td>P2879[USACO07JAN]Tallest Cow S</td><td>USACO</td></tr>
+        <tr data-cat="差分"><td>P3397地毯</td><td>差分</td></tr>
+        <tr data-cat="小学组"><td>B4566[山东省小学组体验营2026]施肥</td><td>小学组</td></tr>
+        <tr data-cat="差分"><td>P13787地毯加强版</td><td>差分</td></tr>
+      </tbody>
+    </table></div></div>
+
+    <nav class="chapter-grid" style="margin-top:24px;">
+      <a class="chapter-card" href="day2.html"><span class="tag">返回</span><h4>day2 首页</h4></a>
+      <a class="chapter-card" href="index.html"><span class="tag">返回首页</span><h4>站点总览</h4></a>
+    </nav>
+  
+    <nav class="pager"><a class="pager-next" href="day2-summary.html">下一页：day2 学习总结 <span class="pg-ico">→</span></a></nav>
+  </main>
+
+  <footer class="site-footer">编程竞赛知识点与例题学习笔记</footer>
+  <script src="main.js"></script>
+</body>
+</html>

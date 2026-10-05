@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>day1·晚上 —— 算法实现逻辑 · 编程竞赛笔记</title>
+  <link rel="icon" type="image/x-icon" href="icon.ico">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="site-header">
+    <div class="inner">
+      <a class="brand" href="index.html"><img class="brand-ico" src="icon.ico" alt="">编程竞赛笔记</a>
+            <nav class="site-nav">
+        <a href="index.html">首页</a>
+        <a href="day1.html" class="active">day1</a>
+        <a href="day2.html">day2</a>
+        <a href="day3.html">day3</a>
+        <a href="dfs-bfs.html">day4</a>
+        <div class="nav-drop">
+          <span class="nav-drop-btn">其他 ▾</span>
+          <div class="drop-menu">
+            <a href="topics-basic.html">基础语法</a>
+            <a href="topics-algo.html">基础算法</a>
+            <a href="topics-string.html">字符串</a>
+            <a href="topics-dp.html">动态规划</a>
+            <a href="stl-containers.html">STL容器</a>
+            <a href="topics-graph.html">图论</a>
+            <a href="topics-math.html">数学</a>
+            <a href="topics-round.html">周赛题解</a>
+            <a href="topics-prelim.html">初赛篇</a>
+            <a href="summary.html">学习总结</a>
+          </div>
+        </div>
+      </nav>
+    </div>
+</header>
+
+  <main class="main"><nav class="crumb"><a href="index.html">首页</a><span class="sep">›</span><a href="day1.html">day1</a><span class="sep">›</span><span>晚上 · 算法实现逻辑</span></nav>
+    <div class="hero"><span class="hero-ico">🌙</span><h1>day1 · 晚上 —— 算法实现逻辑</h1><p class="subtitle">机器人扫地 · 朋友统计的逐步实现环节</p></div>
+
+    <h2>2.1 机器人扫地 · 实现逻辑</h2>
+    <div class="card"><div class="table-wrap"><table>
+      <thead><tr><th>实现环节</th><th>操作说明</th><th>对应代码 / 方法</th><th>注意事项</th></tr></thead>
+      <tbody>
+        <tr><td>查找范围限定</td><td>无需查找与当前位置相等的元素，仅定位首个大于当前值的位</td><td><code>upper_bound</code> / <code>find</code></td><td>该位置一定没有污渍</td></tr>
+        <tr><td>实现方案选择</td><td>upper 二分或 find 均可</td><td><code>upper_bound</code> / <code>find</code></td><td>按需选择</td></tr>
+        <tr><td>结果取值转换</td><td>迭代器解引用（加星）转具体数值</td><td><code>*it</code></td><td>解引用后才取值</td></tr>
+        <tr><td>运算逻辑规则</td><td>所有情况都计入统计，目标位置值减当前位置值</td><td><code>ans += *it - cur</code></td><td>全部计入</td></tr>
+        <tr><td>元素删除操作</td><td>目标位置值不为 0 时 erase 删除</td><td><code>erase(it)</code></td><td>值为 0 不删</td></tr>
+        <tr><td>前序位置查找</td><td>迭代器减减得到前序位置，运算同步调整</td><td><code>it--</code></td><td>反向查找调整逻辑</td></tr>
+        <tr><td>判断条件写法</td><td>判断条件外置反向逻辑，更简便</td><td>条件外置</td><td>简洁写法</td></tr>
+      </tbody>
+    </table></div></div>
+
+    <h2>2.2 朋友统计 · 实现逻辑</h2>
+    <div class="card"><div class="table-wrap"><table>
+      <thead><tr><th>实现环节</th><th>操作说明</th><th>对应代码 / 方法</th><th>注意事项</th></tr></thead>
+      <tbody>
+        <tr><td>sum1 定义</td><td>全体用户中位置距离 K2 的总数</td><td>全局二分 upper/lower_bound</td><td>统计后减 1 排除自身</td></tr>
+        <tr><td>sum2 定义</td><td>同校内位置距离 K1 的总数</td><td>校内二分</td><td>在所属学校数组查找</td></tr>
+        <tr><td>sum3 定义</td><td>同校内位置距离 K2 的总数，抵消重复计数</td><td>校内二分</td><td>最终 = sum1+sum2−sum3</td></tr>
+        <tr><td>K1/K2 不一致</td><td>仅对校内距离 K2 部分折算，超出剔除，框架适配所有场景</td><td>公式 sum1+sum2−sum3</td><td>无需额外调整</td></tr>
+        <tr><td>存储结构选型</td><td>学校编号最高 10¹⁹，固定数组 MLE，用 map 映射 int→动态数组</td><td><code>map&lt;int, vector&lt;int&gt;&gt;</code></td><td>map 只与实际个数相关</td></tr>
+        <tr><td>排序冲突规避</td><td>新建独立数组存位置再排序，避免对应关系错乱</td><td>备份数组后 sort</td><td>原数组保留不排</td></tr>
+        <tr><td>全局区间查找</td><td>upper/lower_bound 定区间，统计后减 1</td><td>upper_bound / lower_bound</td><td>减 1 剔除自身</td></tr>
+        <tr><td>校内区间查找</td><td>调所属学校动态数组，在校内有序序列中查</td><td><code>map[学校]</code> 对应 vector</td><td>map 对应字段查找</td></tr>
+        <tr><td>易错点提醒</td><td>排序仅对备份数组，原数组完整保留</td><td>排序只对备份</td><td>原数组不敢排</td></tr>
+        <tr><td>后续计划</td><td>按方案独立编写代码与验证</td><td>实操练习</td><td>独立完成并验证</td></tr>
+      </tbody>
+    </table></div></div>
+
+    <div class="note">💡 机器人扫地完整解法与样例已整理为可运行 C++ 代码（robot.cpp），需时可按题面放开 freopen 与删除 system("pause")。</div>
+
+    <nav class="chapter-grid" style="margin-top:24px;">
+      <a class="chapter-card" href="day1.html"><span class="tag">返回</span><h4>day1 首页</h4></a>
+      <a class="chapter-card" href="day1-pm.html"><span class="tag">上一页</span><h4>day1 · 下午 —— 核心工具与例题</h4></a>
+    </nav>
+  
+    <nav class="pager"><a class="pager-next" href="day1-summary.html">下一页：day1 学习总结 <span class="pg-ico">→</span></a></nav>
+  </main>
+
+  <footer class="site-footer">编程竞赛知识点与例题学习笔记</footer>
+  <script src="main.js"></script>
+</body>
+</html>

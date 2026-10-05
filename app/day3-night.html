@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>day3 · 晚上 · 差分与二分 · 编程竞赛笔记</title>
+  <link rel="icon" type="image/x-icon" href="icon.ico">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="site-header">
+    <div class="inner">
+      <a class="brand" href="index.html"><img class="brand-ico" src="icon.ico" alt="">编程竞赛笔记</a>
+            <nav class="site-nav">
+        <a href="index.html">首页</a>
+        <a href="day1.html">day1</a>
+        <a href="day2.html">day2</a>
+        <a href="day3.html" class="active">day3</a>
+        <a href="dfs-bfs.html">day4</a>
+        <div class="nav-drop">
+          <span class="nav-drop-btn">其他 ▾</span>
+          <div class="drop-menu">
+            <a href="topics-basic.html">基础语法</a>
+            <a href="topics-algo.html">基础算法</a>
+            <a href="topics-string.html">字符串</a>
+            <a href="topics-dp.html">动态规划</a>
+            <a href="stl-containers.html">STL容器</a>
+            <a href="topics-graph.html">图论</a>
+            <a href="topics-math.html">数学</a>
+            <a href="topics-round.html">周赛题解</a>
+            <a href="topics-prelim.html">初赛篇</a>
+            <a href="summary.html">学习总结</a>
+          </div>
+        </div>
+      </nav>
+    </div>
+  </header>
+
+  <main class="main"><nav class="crumb"><a href="index.html">首页</a><span class="sep">›</span><a href="day3.html">day3</a><a href="dfs-bfs.html">深搜广搜</a><span class="sep">›</span><span>晚上</span></nav>
+    <div class="hero">
+      <span class="hero-ico">🌙</span>
+      <h1>day3 · 晚上 —— 差分与二分</h1>
+      <p class="subtitle">一维/二维差分 · 整数/实数二分 · 前缀和的逆运算 · 二分答案</p>
+    </div>
+
+    <div class="dashboard">
+      <div class="dash-card"><div class="d-ico">📘</div><div class="d-num">6</div><div class="d-lbl">知识点</div></div>
+      <div class="dash-card alt"><div class="d-ico">🧮</div><div class="d-num">2</div><div class="d-lbl">差分（一维/二维）</div></div>
+      <div class="dash-card orange"><div class="d-ico">🔍</div><div class="d-num">2</div><div class="d-lbl">二分（整数/实数）</div></div>
+      <div class="dash-card purple"><div class="d-ico">⚡</div><div class="d-num">O(1)</div><div class="d-lbl">区间更新</div></div>
+    </div>
+
+    <section class="card">
+      <h2>一维差分</h2>
+      <p>差分是前缀和的逆运算：对差分数组求前缀和即可还原原数组，可原地修改、无需额外空间。</p>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr><th>要点</th><th>内容</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>定义</td><td>B[i] = A[i] - A[i-1]；若 A 是 B 的前缀和，则 B 是 A 的差分数组</td></tr>
+            <tr><td>区间加</td><td>区间 [L,R] 整体加 C：只需 B[L]+=C、B[R+1]-=C，O(1) 完成</td></tr>
+            <tr><td>口诀</td><td>哪里不对改哪里——仅改对应位置，自动影响后续前缀和</td></tr>
+            <tr><td>边界</td><td>需保证 L≤R，若 L&gt;R 则交换两值统一处理</td></tr>
+            <tr><td>应用</td><td>海底高铁等区间计数题，避免暴力逐元素 O(n) 修改超时</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="card">
+      <h2>二维差分</h2>
+      <p>二维差分是二维前缀和的逆运算，可由前缀和公式移项推导，无需单独记忆。</p>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr><th>要点</th><th>内容</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>维护公式</td><td>B[i][j] = A[i][j] - A[i-1][j] - A[i][j-1] + A[i-1][j-1]</td></tr>
+            <tr><td>矩形加</td><td>矩形 (X1,Y1)-(X2,Y2) 加 C：仅对差分数组四个对应位置做加减，自动抵消重复区域偏差</td></tr>
+            <tr><td>还原</td><td>对差分数组求二维前缀和，即可还原更新后的原数组</td></tr>
+            <tr><td>应用</td><td>铺地毯等二维区间覆盖/计数题目</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="card">
+      <h2>二分法</h2>
+      <p>题目出现"求最大/最小"类最值表述时约 80% 优先考虑二分；答案与输入变量存在明确的单调（正比/反比）关系即可用二分，复杂度优化至 O(log n)。</p>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr><th>类型</th><th>要点</th></tr>
+          </thead>
+          <tbody>
+            <tr><td><b>整数二分·模板</b></td><td>模板固定：确定答案左右边界、设独立变量存答案、构造校验函数 F；仅需调整校验函数适配不同题目。校验函数返回 int 或 bool，推荐 int（可获取具体计算值）。案例：伐木题锯片高度与木材总长成反比（单调），暴力 4×10^11 降至 10^7。</td></tr>
+            <tr><td><b>实数二分</b></td><td>答案为小数时用 double 边界，避免整数精度丢失；设独立精度变量控制终止，精度比要求保留小数位多一位，或固定循环 60 次。</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <ul style="line-height:1.8;margin-top:10px;">
+        <li><b>二分模板千年不变</b>：核心框架固定，构造校验函数是最难一步，多数为模拟逻辑，复杂场景可结合搜索、连通块判断。</li>
+        <li><b>单调性</b>：若高度 X 满足需求，则 X 以下均可行；若 X 不满足，则 X 以上均不可行。</li>
+      </ul>
+    </section>
+
+    <section class="card">
+      <h2>课后练习与学习要求</h2>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr><th>内容</th><th>核心要点</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>练习顺序</td><td>先完成当日错题订正，未订正不得提前写后续练习题；订正后先完成差分 D3 第一题，再推进第二题，可额外练习二维差分"铺地毯"。</td></tr>
+            <tr><td>备考方向</td><td>陕西省级一等奖难度不高，核心为熟练掌握基础算法实现与应用场景，靠高频练习巩固。</td></tr>
+            <tr><td>编码规范</td><td>注意变量范围与边界判断，不得依赖"可能不会报错"的侥幸心理，避免数组越界、数值溢出。</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <h2>章节导航</h2>
+    <div class="chapter-grid">
+      <a class="chapter-card" href="day3.html">
+        <span class="tag">day3 · 总览</span>
+        <h4>day3 首页</h4>
+        <p>day3 知识体系结构图 · 回到 day3 总览</p>
+      </a>
+      <a class="chapter-card" href="day3-pm.html">
+        <span class="tag">day3 · 下午</span>
+        <h4>算法解题思路讲评</h4>
+        <p>食堂打饭(优先队列) · 序列求模(数学) · 自动售货机(前缀和+二分)</p>
+      </a>
+      <a class="chapter-card" href="index.html">
+        <span class="tag">返回</span>
+        <h4>首页</h4>
+        <p>回到站点总览</p>
+      </a>
+    </div>
+
+    <nav class="pager"><a class="pager-prev" href="day3-pm.html">← 上一页：day3 · 下午</a><a class="pager-next" href="summary.html">下一页：学习总结 <span class="pg-ico">→</span></a></nav>
+  </main>
+
+  <footer class="site-footer">编程竞赛知识点与例题学习笔记</footer>
+  <script src="main.js"></script>
+</body>
+</html>

@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>专题 · 基础算法 · 编程竞赛笔记</title>
+  <link rel="icon" type="image/x-icon" href="icon.ico">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="site-header">
+    <div class="inner">
+      <a class="brand" href="index.html"><img class="brand-ico" src="icon.ico" alt="">编程竞赛笔记</a>
+      <nav class="site-nav">
+        <a href="index.html">首页</a>
+        <a href="day1.html">day1</a>
+        <a href="day2.html">day2</a>
+        <a href="day3.html">day3</a>
+        <a href="dfs-bfs.html">day4</a>
+        <div class="nav-drop">
+          <span class="nav-drop-btn">其他 ▾</span>
+          <div class="drop-menu">
+            <a href="topics-basic.html">基础语法</a>
+            <a href="topics-algo.html" class="active">基础算法</a>
+            <a href="topics-string.html">字符串</a>
+            <a href="topics-dp.html">动态规划</a>
+            <a href="stl-containers.html">STL容器</a>
+            <a href="topics-graph.html">图论</a>
+            <a href="topics-math.html">数学</a>
+            <a href="topics-round.html">周赛题解</a>
+            <a href="topics-prelim.html">初赛篇</a>
+            <a href="summary.html">学习总结</a>
+          </div>
+        </div>
+      </nav>
+    </div>
+  </header>
+
+  <main class="main"><nav class="crumb"><a href="index.html">首页</a><span class="sep">›</span><span>专题 · 基础算法</span></nav>
+    <div class="hero"><span class="hero-ico">🧮</span><h1>专题 · 基础算法</h1><p class="subtitle">复杂度分析 · 常见排序 · 枚举技巧 · 递归与递推 · 模运算公式 · 前缀和（一维 / 二维）</p></div>
+
+    <h2>一、复杂度分析</h2>
+    <div class="card">
+      <p class="lead">复杂度衡量算法用时 / 内存随<b>数据规模 n</b> 增长的趋势。算大 O 时：只保留与规模有关的项、忽略常数与系数、只留最高次项。竞赛默认按<b>最坏时间复杂度</b>评估。</p>
+      <div class="table-wrap"><table>
+        <thead><tr><th>复杂度</th><th>含义</th><th>大致能过的 n（约 1e8 次操作/秒）</th></tr></thead>
+        <tbody>
+          <tr><td>O(1)</td><td>常数</td><td>不限</td></tr>
+          <tr><td>O(log n)</td><td>对数（折半、数位拆分）</td><td>≤ 10¹⁸</td></tr>
+          <tr><td>O(n)</td><td>线性</td><td>≤ 10⁸</td></tr>
+          <tr><td>O(n log n)</td><td>排序、二分套循环</td><td>≤ 2×10⁶</td></tr>
+          <tr><td>O(n²)</td><td>双重循环、简单排序</td><td>≤ 5000</td></tr>
+          <tr><td>O(n³)</td><td>三重循环</td><td>≤ 500</td></tr>
+          <tr><td>O(2ⁿ)</td><td>子集 / 回溯</td><td>≤ 20</td></tr>
+          <tr><td>O(n!)</td><td>全排列暴力</td><td>≤ 10</td></tr>
+        </tbody>
+      </table></div>
+      <div class="tip"><b>超时经验线</b>：普通评测机每秒约做 <b>10⁸</b> 次基本操作。把「复杂度 × n 的量级」估一下，超过 1e8 大概率 TLE。例如 O(n²) 配 n=10⁶ 就是 10¹²，必然超时。</div>
+      <p class="lead"><b>空间复杂度</b>：主要看数组开多大。int 4 字节、long long 8 字节；256MB 约能开 6×10⁷ 个 int。大数组先算一下字节数，别盲目开大导致 MLE。</p>
+    </div>
+
+    <h2>二、排序</h2>
+    <div class="card">
+      <p class="lead">排序是最基础的预处理。基于比较的排序下界是 O(n log n)；计数排序等非比较排序可达 O(n + w)（w 为值域）。</p>
+      <div class="table-wrap"><table>
+        <thead><tr><th>排序</th><th>思想</th><th>平均复杂度</th><th>一句话适用</th></tr></thead>
+        <tbody>
+          <tr><td>选择排序</td><td>每轮选最小放前面</td><td>O(n²)</td><td>教学理解，竞赛基本不用</td></tr>
+          <tr><td>冒泡排序</td><td>相邻两两交换把大的冒到后面</td><td>O(n²)</td><td>近乎有序的数据、稳定</td></tr>
+          <tr><td>插入排序</td><td>把新元素插入前面已排好的序列</td><td>O(n²)</td><td>数据基本有序时极快</td></tr>
+          <tr><td>计数排序</td><td>按值域开桶统计个数</td><td>O(n + w)</td><td>值域小且离散度低时</td></tr>
+          <tr><td>STL sort</td><td>底层快速排序 + 插入 + 堆排序混合</td><td>O(n log n)</td><td>竞赛默认，随手用</td></tr>
+          <tr><td>结构体排序</td><td>自定义 cmp 多关键字</td><td>O(n log n)</td><td>多条件排名类题目</td></tr>
+        </tbody>
+      </table></div>
+      <div class="note"><b>稳定性</b>：冒泡 / 插入 / 计数 / 归并是稳定的；选择 / 快排 / 堆排序不稳定。需要保持相等元素相对顺序时用 <code>stable_sort</code>。</div>
+      <h3>STL sort 与结构体排序（可复制模板）</h3>
+      <pre class="codebox"><code>#include &lt;bits/stdc++.h&gt;
+using namespace std;
+
+struct Student {
+    int total;      // 总分
+    int chinese;    // 语文分
+    int id;         // 学号
+} a[100005];
+
+bool cmp(Student x, Student y) {              // 自定义比较器
+    if (x.total != y.total) return x.total &gt; y.total;        // 总分降序
+    if (x.chinese != y.chinese) return x.chinese &gt; y.chinese; // 语文降序
+    return x.id &lt; y.id;                                       // 学号升序
+}
+
+int main() {
+    int n; cin &gt;&gt; n;
+    for (int i = 1; i &lt;= n; i++)
+        cin &gt;&gt; a[i].total &gt;&gt; a[i].chinese &gt;&gt; a[i].id;
+
+    int b[8] = {0, 5, 2, 9, 1, 5, 6};
+    sort(b + 1, b + 7);                          // 默认升序
+    sort(b + 1, b + 7, greater&lt;int&gt;());         // 降序
+
+    sort(a + 1, a + n + 1, cmp);                 // 结构体多关键字排序
+    for (int i = 1; i &lt;= n; i++)
+        cout &lt;&lt; a[i].id &lt;&lt; " " &lt;&lt; a[i].total &lt;&lt; "\n";
+    return 0;
+}</code></pre>
+      <p class="lead">区间是<b>左闭右开</b>：<code>sort(a+1, a+n+1)</code> 排 a[1..n]；0 起数组写 <code>sort(a, a+n)</code>。<code>pair</code> 自带字典序比较，可直接 sort。</p>
+    </div>
+
+    <h2>三、枚举</h2>
+    <div class="card">
+      <p class="lead">枚举就是把所有可能答案暴力试一遍。关键是控制枚举范围：n 决定能用哪种枚举。</p>
+      <div class="table-wrap"><table>
+        <thead><tr><th>方式</th><th>思想</th><th>适用 / 规模</th></tr></thead>
+        <tbody>
+          <tr><td>循环枚举</td><td>直接 for 循环把所有情况跑一遍</td><td>单层 / 双层能覆盖；n 较大时用不上</td></tr>
+          <tr><td>二进制枚举</td><td>用一个整数的每一位表示「选 / 不选」</td><td>子集问题，n ≤ 20，O(2ⁿ)</td></tr>
+          <tr><td>排列枚举</td><td>next_permutation 生成全排列</td><td>全排列 / 顺序相关，n ≤ 10</td></tr>
+          <tr><td>枚举优化</td><td>缩小枚举范围、剪枝、只枚举必要变量</td><td>减少常数与无用分支</td></tr>
+        </tbody>
+      </table></div>
+      <h3>二进制枚举子集（可复制模板）</h3>
+      <pre class="codebox"><code>#include &lt;bits/stdc++.h&gt;
+using namespace std;
+
+int main() {
+    int n; cin &gt;&gt; n;                  // 一般 n &lt;= 20
+    vector&lt;int&gt; a(n);
+    for (int i = 0; i &lt; n; i++) cin &gt;&gt; a[i];
+
+    for (int mask = 0; mask &lt; (1 &lt;&lt; n); mask++) {   // 枚举所有 2^n 个子集
+        for (int i = 0; i &lt; n; i++)
+            if (mask &gt;&gt; i &amp; 1)        // 第 i 个元素被选中
+                cout &lt;&lt; a[i] &lt;&lt; " ";
+        cout &lt;&lt; "\n";
+    }
+    return 0;
+}</code></pre>
+      <p class="lead">排列枚举一行搞定：<code>sort(a, a+n); do { ... } while(next_permutation(a, a+n));</code>（先 sort 才能枚举全）。<b>枚举优化</b>：能从数据范围倒推枚举量，提前 break、固定一个变量枚举另一个、把无关变量移出循环。</p>
+    </div>
+
+    <h2>四、递归与递推</h2>
+    <div class="card">
+      <div class="table-wrap"><table>
+        <thead><tr><th></th><th>递归</th><th>递推</th></tr></thead>
+        <tbody>
+          <tr><td>方向</td><td>大问题拆成小问题，自顶向下</td><td>从初值出发，自底向上算到大问题</td></tr>
+          <tr><td>写法</td><td>函数调用自己</td><td>for 循环填表</td></tr>
+          <tr><td>注意</td><td>要有终止条件、防栈溢出</td><td>要先确定初值与转移顺序</td></tr>
+        </tbody>
+      </table></div>
+      <p class="lead"><b>递归三要素</b>：① 终止条件（Base Case，防止无限递归）；② 递推关系 f(n)=…；③ 向终止条件靠近的自调用。</p>
+      <h3>记忆化递归（可复制模板）</h3>
+      <pre class="codebox"><code>#include &lt;bits/stdc++.h&gt;
+using namespace std;
+typedef long long ll;
+const ll MOD = 1e9 + 7;
+const int N = 100005;
+ll memo[N];
+
+ll fib(int n) {
+    if (n == 1 || n == 2) return 1;
+    if (memo[n] != -1) return memo[n];          // 算过就直接返回
+    return memo[n] = (fib(n - 1) + fib(n - 2)) % MOD;
+}
+
+int main() {
+    memset(memo, -1, sizeof(memo));             // 备忘录初始为 -1
+    int n; cin &gt;&gt; n;
+    cout &lt;&lt; fib(n) &lt;&lt; "\n";
+    return 0;
+}</code></pre>
+      <div class="tip"><b>记忆化思想</b>：用数组记下已算过的子问题答案，避免重复计算。朴素斐波那契是 O(2ⁿ)，加记忆化后变成 O(n)——这也是动态规划的雏形。</div>
+    </div>
+
+    <h2>五、模运算</h2>
+    <div class="card">
+      <p class="lead">结果可能很大时，题目常要求「对 p 取模」。核心公式如下（细节、逆元、快速幂见 <a href="topics-math.html">数学专题</a>）：</p>
+      <div class="table-wrap"><table>
+        <thead><tr><th>运算</th><th>取模公式</th><th>注意</th></tr></thead>
+        <tbody>
+          <tr><td>加</td><td>(a+b) % p = (a%p + b%p) % p</td><td>先取模再相加</td></tr>
+          <tr><td>减</td><td>(a-b) % p</td><td>可能为负，写 ((a%p - b%p) % p + p) % p</td></tr>
+          <tr><td>乘</td><td>(a×b) % p</td><td>两个模数相乘可能爆 int / long long，注意开 ll 或用快速乘</td></tr>
+          <tr><td>除</td><td>—</td><td>不能直接取模，要用乘法逆元（见数学专题）</td></tr>
+        </tbody>
+      </table></div>
+      <div class="note">负数取模统一写法：<code>((x % p) + p) % p</code>。</div>
+    </div>
+
+    <h2>六、前缀和</h2>
+    <div class="card">
+      <p class="lead">前缀和是最常用的「预处理换查询」手段：预处理 O(n)，之后每次区间查询 O(1)。本质是用「一段前缀减另一段前缀」得到任意区间信息。</p>
+      <h3>一维前缀和</h3>
+      <p class="lead">定义 pre[i] = a[1]+…+a[i]，递推 <code>pre[i] = pre[i-1] + a[i]</code>；区间 [l,r] 和 = <code>pre[r] - pre[l-1]</code>。同理可做前缀积、前缀异或、区间内某类数个数。</p>
+      <h3>二维前缀和</h3>
+      <p class="lead">pre[i][j] 是左上角 (1,1) 到 (i,j) 的子矩阵和：<code>pre[i][j] = pre[i-1][j] + pre[i][j-1] - pre[i-1][j-1] + a[i][j]</code>；查询子矩阵 (x1,y1)~(x2,y2) 用「大减小、加回重叠」。</p>
+      <pre class="codebox"><code>#include &lt;bits/stdc++.h&gt;
+using namespace std;
+typedef long long ll;
+const int N = 1005;
+int a[N]; ll pre[N];            // 一维
+int g[N][N]; ll s[N][N];        // 二维
+
+int main() {
+    int n; cin &gt;&gt; n;
+    for (int i = 1; i &lt;= n; i++) {
+        cin &gt;&gt; a[i];
+        pre[i] = pre[i - 1] + a[i];           // 预处理
+    }
+    int l, r; cin &gt;&gt; l &gt;&gt; r;
+    cout &lt;&lt; pre[r] - pre[l - 1] &lt;&lt; "\n";       // O(1) 区间和
+
+    int m; cin &gt;&gt; n &gt;&gt; m;
+    for (int i = 1; i &lt;= n; i++)
+        for (int j = 1; j &lt;= m; j++) {
+            cin &gt;&gt; g[i][j];
+            s[i][j] = s[i-1][j] + s[i][j-1] - s[i-1][j-1] + g[i][j];
+        }
+    int x1, y1, x2, y2; cin &gt;&gt; x1 &gt;&gt; y1 &gt;&gt; x2 &gt;&gt; y2;
+    ll ans = s[x2][y2] - s[x1-1][y2] - s[x2][y1-1] + s[x1-1][y1-1];
+    cout &lt;&lt; ans &lt;&lt; "\n";
+    return 0;
+}</code></pre>
+      <div class="tip"><b>速记</b>：提交前先估复杂度对不对得上数据范围；排序直接上 sort 并自定义 cmp；子集 n≤20 用二进制枚举；递归别忘终止条件、重复子问题加记忆化；频繁区间查询就上前缀和。</div>
+    </div>
+
+    <nav class="chapter-grid" style="margin-top:24px;">
+      <a class="chapter-card" href="index.html"><span class="tag">返回</span><h4>返回首页</h4><p>回到站点总览</p></a>
+      <a class="chapter-card" href="topics-basic.html"><span class="tag">上一专题</span><h4>基础语法</h4><p>C++ 基础 · 输入输出 · 常用语法</p></a>
+      <a class="chapter-card" href="summary.html"><span class="tag">汇总</span><h4>学习总结</h4><p>核心知识点一览 · 方法论</p></a>
+    </nav>
+
+    <nav class="pager"><a class="pager-next" href="index.html">返回首页 <span class="pg-ico">→</span></a></nav>
+  </main>
+
+  <footer class="site-footer">编程竞赛知识点与例题学习笔记</footer>
+  <script src="main.js"></script>
+</body>
+</html>

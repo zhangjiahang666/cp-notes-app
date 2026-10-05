@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>专题 · 周赛方法论 · 编程竞赛笔记</title>
+  <link rel="icon" type="image/x-icon" href="icon.ico">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="site-header">
+    <div class="inner">
+      <a class="brand" href="index.html"><img class="brand-ico" src="icon.ico" alt="">编程竞赛笔记</a>
+      <nav class="site-nav">
+        <a href="index.html">首页</a>
+        <a href="day1.html">day1</a>
+        <a href="day2.html">day2</a>
+        <a href="day3.html">day3</a>
+        <a href="dfs-bfs.html">day4</a>
+        <div class="nav-drop">
+          <span class="nav-drop-btn">其他 ▾</span>
+          <div class="drop-menu">
+            <a href="topics-basic.html">基础语法</a>
+            <a href="topics-algo.html">基础算法</a>
+            <a href="topics-string.html">字符串</a>
+            <a href="topics-dp.html">动态规划</a>
+            <a href="stl-containers.html">STL容器</a>
+            <a href="topics-graph.html">图论</a>
+            <a href="topics-math.html">数学</a>
+            <a href="topics-round.html" class="active">周赛题解</a>
+            <a href="topics-prelim.html">初赛篇</a>
+            <a href="summary.html">学习总结</a>
+          </div>
+        </div>
+      </nav>
+    </div>
+  </header>
+
+  <main class="main"><nav class="crumb"><a href="index.html">首页</a><span class="sep">›</span><span>专题 · 周赛方法论</span></nav>
+    <div class="hero"><span class="hero-ico">🏁</span><h1>专题 · 周赛方法论</h1><p class="subtitle">应试策略 · 高频套路速查（信号 → 方法）· 二分答案 / 前缀和差分模板 · 对拍与调试 · 易错点清单 · 提交规范</p></div>
+
+    <div class="note">本页<b>不收录任何具体场次题解</b>，只整理周赛 / 模拟赛通用的<b>应试策略与方法论套路</b>：先把比赛当成一场流程来打，再用速查表快速识别题型、套通用模板。</div>
+
+    <h2>一、周赛 / 模拟赛应试策略</h2>
+    <div class="card">
+      <h3>读题顺序：先全卷扫一遍再动手</h3>
+      <p class="lead">开赛后先用 5~10 分钟把所有题目<b>快速通读</b>（看数据范围、判断难度、标记关键词），在脑子里给每题排个难易序，不要拿到第一题就死磕。</p>
+      <div class="table-wrap"><table>
+        <thead><tr><th>阶段</th><th>做法</th><th>目的</th></tr></thead>
+        <tbody>
+          <tr><td>扫卷（前 10 分钟）</td><td>通读全部题 + 数据范围，标记「一眼能做 / 需要想 / 难」</td><td>建立全局视图，避免错过后面的送分题</td></tr>
+          <tr><td>顺序（先易后难）</td><td>按「最有把握拿分」的顺序做，不按题号死做</td><td>先把稳分拿到手，建立信心</td></tr>
+          <tr><td>卡题限时</td><td>单题想不超过 ~20 分钟没思路就先跳过，做个记号</td><td>防止被一题锁死、浪费整场时间</td></tr>
+          <tr><td>收尾</td><td>回头啃跳过的题 + 复查已 AC 题的边界</td><td>把能捞的分都捞回来</td></tr>
+        </tbody>
+      </table></div>
+      <div class="tip"><b>时间分配口诀</b>：先易后难、卡题就跳、样例必跑、边界必查。一道题想得再漂亮，不如先把确定能拿的分拿到。</div>
+    </div>
+
+    <h2>二、高频套路速查表（识别信号 → 用什么方法）</h2>
+    <div class="card">
+      <p class="lead">读题时先抓<b>识别信号</b>，再对号入座选方法。下表是周赛最常见的几类，别一上来就上复杂算法。</p>
+      <div class="table-wrap"><table>
+        <thead><tr><th>题型</th><th>识别信号</th><th>用什么方法</th></tr></thead>
+        <tbody>
+          <tr><td>模拟</td><td>按题意一步步操作，规则描述很细</td><td>直接按题意实现，重点抠细节（顺序、下标、边界）</td></tr>
+          <tr><td>枚举 / 暴力</td><td>数据范围很小（如 n ≤ 20）</td><td>暴力枚举所有情况，能过就行，别过度优化</td></tr>
+          <tr><td>贪心</td><td>每次选局部最优即可、可证交换后不会更差</td><td>按某个关键字排序后依次取；区间类按右端点排序</td></tr>
+          <tr><td>二分答案</td><td>求「最大的最小 / 最小的最大」，答案随某变量单调</td><td>二分答案区间 + 写一个 check(x) 判定函数</td></tr>
+          <tr><td>前缀和 / 差分</td><td>多次区间求和，或多次区间整体加/减</td><td>前缀和 O(1) 查区间和；差分 O(1) 做区间修改</td></tr>
+          <tr><td>栈 / 队列</td><td>括号匹配、成对消除、单调结构、滑动窗口</td><td>栈模拟配对；单调栈 / 单调队列维护极值</td></tr>
+        </tbody>
+      </table></div>
+      <div class="note"><b>贪心证明小技巧——邻项交换法</b>：假设相邻两个方案顺序交换，比较结果哪个更优，由此推出应按什么关键字排序（如加工时间短的任务先做，总等待时间更小）。</div>
+    </div>
+
+    <h2>三、通用模板代码</h2>
+    <div class="card">
+      <h3>二分答案模板（整数）</h3>
+      <p class="lead">适用：答案具有<b>单调性</b>（x 可行则更小/更大的也可行）。核心是把「求答案」转化为「判定答案 x 是否可行」。</p>
+      <pre class="codebox"><code>#include &lt;bits/stdc++.h&gt;
+using namespace std;
+typedef long long ll;
+
+// check(x)：判断答案为 x 时是否可行（按题目自定义）
+// 单调性：x 越大越容易可行，则求「最大可行值」
+bool check(ll x) {
+    // 在这里写判定逻辑，返回 true 表示 x 可行
+    return true;
+}
+
+int main() {
+    ll lo = 1, hi = 1e9, ans = lo;   // 上下界按题意取足
+    while (lo &lt;= hi) {
+        ll mid = (lo + hi) / 2;
+        if (check(mid)) { ans = mid; lo = mid + 1; }  // 可行：记录并尝试更大
+        else             { hi = mid - 1; }            // 不可行：往小收
+    }
+    cout &lt;&lt; ans &lt;&lt; "\n";
+    return 0;
+}</code></pre>
+
+      <h3>前缀和 / 差分模板</h3>
+      <p class="lead"><b>前缀和</b>把多次区间求和降到 O(1)；<b>差分</b>把多次区间整体加减降到 O(1)，最后求一次前缀和还原。</p>
+      <pre class="codebox"><code>#include &lt;bits/stdc++.h&gt;
+using namespace std;
+const int N = 100005;
+int a[N], s[N], d[N];   // a 原数组, s 前缀和, d 差分数组
+
+int main() {
+    int n, q; cin &gt;&gt; n &gt;&gt; q;
+    for (int i = 1; i &lt;= n; i++) cin &gt;&gt; a[i];
+
+    // 前缀和：任意区间 [l,r] 的和 = s[r] - s[l-1]
+    for (int i = 1; i &lt;= n; i++) s[i] = s[i - 1] + a[i];
+
+    // 差分：区间 [l,r] 整体加 v，O(1) 完成
+    // d[l] += v; d[r+1] -= v;  最后对 d 求前缀和即得实际增量
+    while (q--) {
+        int l, r, v; cin &gt;&gt; l &gt;&gt; r &gt;&gt; v;
+        d[l] += v; d[r + 1] -= v;
+    }
+    for (int i = 1; i &lt;= n; i++) {
+        d[i] += d[i - 1];   // 差分数组前缀和 = 该位置总增量
+        cout &lt;&lt; a[i] + d[i] &lt;&lt; " \n"[i == n];
+    }
+    return 0;
+}</code></pre>
+
+      <h3>实数二分模板</h3>
+      <p class="lead">求实数答案时用 double，边界不靠 ±1 收缩，而是用精度 ε 控制结束条件。</p>
+      <pre class="codebox"><code>#include &lt;bits/stdc++.h&gt;
+using namespace std;
+const double eps = 1e-7;
+
+bool check(double x) { return true; }   // 实数判定函数（按题意写）
+
+int main() {
+    double lo = 0, hi = 1e9, ans = lo;
+    while (hi - lo &gt; eps) {
+        double mid = (lo + hi) / 2;
+        if (check(mid)) { ans = mid; lo = mid; }   // 可行：往大试
+        else             { hi = mid; }            // 不可行：往小收
+    }
+    cout &lt;&lt; fixed &lt;&lt; setprecision(6) &lt;&lt; ans &lt;&lt; "\n";
+    return 0;
+}</code></pre>
+    </div>
+
+    <h2>四、对拍与调试方法</h2>
+    <div class="card">
+      <p class="lead">当代码在样例上过了却 WA，或怀疑自己写法时，用<b>对拍</b>：写一个「暴力/直观版」和一个「高效版」，用大量随机小样例对比两者输出，谁不一致就是 bug。</p>
+      <div class="table-wrap"><table>
+        <thead><tr><th>手段</th><th>做法</th></tr></thead>
+        <tbody>
+          <tr><td>造小样例</td><td>手动构造 1~3 个极小输入，用纸笔算出正确答案，核对程序输出</td></tr>
+          <tr><td>极端数据</td><td>测 n=1、全相同、全逆序、最大值/边界值，防越界与特判遗漏</td></tr>
+          <tr><td>随机对拍</td><td>写随机数据生成器 + 暴力解 + 你的解，脚本循环跑，输出不同即停</td></tr>
+          <tr><td>打桩输出</td><td>关键步骤加临时打印，观察中间变量是否符合预期，调完记得删</td></tr>
+        </tbody>
+      </table></div>
+      <div class="tip"><b>对拍思路</b>：随机生成器造数据 → 分别喂给「暴力程序」和「你的程序」→ 比较两个输出文件，一旦不同就把这组数据单独拎出来手算定位 bug。</div>
+    </div>
+
+    <h2>五、易错点清单</h2>
+    <div class="card">
+      <div class="table-wrap"><table>
+        <thead><tr><th>易错点</th><th>说明 / 对策</th></tr></thead>
+        <tbody>
+          <tr><td>int 溢出</td><td>结果可能超 2×10⁹ 时用 long long；乘法先转 long long 再算</td></tr>
+          <tr><td>数组开小</td><td>按数据范围<b>多开余量</b>（如 n≤1e5 开 1e5+5），别卡着上界开</td></tr>
+          <tr><td>多测不清空</td><td>多组数据时，每组前把数组 / 计数器 / vis 重新初始化干净</td></tr>
+          <tr><td>0 / 1 下标混用</td><td>全程统一一种下标习惯，前缀和类常用 1-based 省掉越界判断</td></tr>
+          <tr><td>边界越界</td><td>d[r+1]、s[l-1]、循环终点等容易越界，逐个核对</td></tr>
+          <tr><td>浮点误差</td><td>实数比较别用 ==，用 &lt; eps 判断；必要时用 long double</td></tr>
+        </tbody>
+      </table></div>
+    </div>
+
+    <h2>六、提交规范</h2>
+    <div class="card">
+      <p class="lead">参照站点 day1 的提交规范，简要重述：</p>
+      <div class="tip">
+        <b>提交前自查</b>：① 用 <code>ios::sync_with_stdio(false); cin.tie(0);</code> 加速输入；② 确认输入输出格式（换行、空格、是否多组）与题目完全一致；③ 删干净调试用的临时打印；④ 确认数组大小 / 数据类型够装；⑤ 边界样例手动过一遍再交。
+      </div>
+    </div>
+
+    <div class="tip"><b>速记</b>：先扫卷排难易 → 先易后难、卡题限时跳 → 识别信号套套路（模拟/枚举/贪心/二分答案/前缀和差分/栈队列）→ 小样例 + 极端数据 + 对拍排错 → 对照易错点清单自查再提交。</div>
+
+    <nav class="chapter-grid" style="margin-top:24px;">
+      <a class="chapter-card" href="index.html"><span class="tag">返回</span><h4>返回首页</h4><p>回到站点总览</p></a>
+      <a class="chapter-card" href="topics-math.html"><span class="tag">上一专题</span><h4>数学专题</h4><p>质数 · 筛法 · gcd · 快速幂 · 排列组合</p></a>
+      <a class="chapter-card" href="summary.html"><span class="tag">汇总</span><h4>学习总结</h4><p>核心知识点一览 · 方法论</p></a>
+    </nav>
+
+    <nav class="pager"><a class="pager-next" href="index.html">返回首页 <span class="pg-ico">→</span></a></nav>
+  </main>
+
+  <footer class="site-footer">编程竞赛知识点与例题学习笔记</footer>
+  <script src="main.js"></script>
+</body>
+</html>

@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>day1·下午 —— 核心工具与四道例题 · 编程竞赛笔记</title>
+  <link rel="icon" type="image/x-icon" href="icon.ico">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="site-header">
+    <div class="inner">
+      <a class="brand" href="index.html"><img class="brand-ico" src="icon.ico" alt="">编程竞赛笔记</a>
+            <nav class="site-nav">
+        <a href="index.html">首页</a>
+        <a href="day1.html" class="active">day1</a>
+        <a href="day2.html">day2</a>
+        <a href="day3.html">day3</a>
+        <a href="dfs-bfs.html">day4</a>
+        <div class="nav-drop">
+          <span class="nav-drop-btn">其他 ▾</span>
+          <div class="drop-menu">
+            <a href="topics-basic.html">基础语法</a>
+            <a href="topics-algo.html">基础算法</a>
+            <a href="topics-string.html">字符串</a>
+            <a href="topics-dp.html">动态规划</a>
+            <a href="stl-containers.html">STL容器</a>
+            <a href="topics-graph.html">图论</a>
+            <a href="topics-math.html">数学</a>
+            <a href="topics-round.html">周赛题解</a>
+            <a href="topics-prelim.html">初赛篇</a>
+            <a href="summary.html">学习总结</a>
+          </div>
+        </div>
+      </nav>
+    </div>
+</header>
+
+  <main class="main"><nav class="crumb"><a href="index.html">首页</a><span class="sep">›</span><a href="day1.html">day1</a><span class="sep">›</span><span>下午 · 核心工具与例题</span></nav>
+    <div class="hero"><span class="hero-ico">📖</span><h1>day1 · 下午 —— 核心工具与四道例题</h1><p class="subtitle">提交规范 · map / set / bound 二分 · 作业要求 · 四道例题解析</p></div>
+
+    <h2>1.1 提交规范</h2>
+    <div class="card"><div class="table-wrap"><table>
+      <thead><tr><th>知识点</th><th>核心要点</th></tr></thead>
+      <tbody>
+        <tr><td>调试操作规范</td><td>代码运行自动检索目录下 <code>.in</code> 文件生成 <code>.out</code> 文件，对比 <code>.out</code> 与标准 <code>.outs</code> 校验结果</td></tr>
+        <tr><td>时间分配要求</td><td>禁止死磕单题，合理规划答题顺序，避免后续无时间作答</td></tr>
+        <tr><td>提交文件大小</td><td>代码文件不得超过 100 KB，正常代码仅数百字节</td></tr>
+      </tbody>
+    </table></div></div>
+
+    <h2>1.2 map 容器</h2>
+    <div class="card"><div class="table-wrap"><table>
+      <thead><tr><th>知识点</th><th>要点</th><th>复杂度</th></tr></thead>
+      <tbody>
+        <tr><td>map 基础属性</td><td>C++ 关联容器，红黑树实现，键值对存储，键唯一、自动升序</td><td>O(logN)</td></tr>
+        <tr><td>map 常用操作</td><td><code>count</code> 判键存在；<code>[]</code> 插入或改值；<code>insert</code> 键存在则失败；<code>erase</code> 删键</td><td>O(logN)</td></tr>
+        <tr><td>map 适用场景</td><td>字符串作索引的去重、统计，规避桶数组索引范围不足</td><td>O(logN)</td></tr>
+      </tbody>
+    </table></div></div>
+
+    <h2>1.3 set 容器</h2>
+    <div class="card"><div class="table-wrap"><table>
+      <thead><tr><th>知识点</th><th>要点</th><th>复杂度</th></tr></thead>
+      <tbody>
+        <tr><td>set 基础属性</td><td>与 map 同底层，仅存唯一键、无值，自动去重排序</td><td>O(logN)</td></tr>
+        <tr><td>set 适用场景</td><td>仅需去重、排序时逻辑更简洁</td><td>O(logN)</td></tr>
+      </tbody>
+    </table></div></div>
+
+    <h2>1.4 bound 二分</h2>
+    <div class="card"><div class="table-wrap"><table>
+      <thead><tr><th>知识点</th><th>要点</th></tr></thead>
+      <tbody>
+        <tr><td>基础规则</td><td>二分前提序列有序 / 单调；<code>lower_bound</code> 返回第一个 ≥ 目标，<code>upper_bound</code> 返回第一个 &gt; 目标</td></tr>
+        <tr><td>数组场景</td><td>返回迭代器减数组首地址得下标；二者差值 = 目标出现次数，差值为 0 判不存在</td></tr>
+        <tr><td>容器场景</td><td>map/set 自带对应方法，无需传序列范围</td></tr>
+      </tbody>
+    </table></div></div>
+
+    <h2>1.5 作业要求</h2>
+    <div class="card"><div class="table-wrap"><table>
+      <thead><tr><th>知识点</th><th>核心要点</th></tr></thead>
+      <tbody>
+        <tr><td>复习资料</td><td>核心笔记上传至国庆 B 班队一比赛页面，可下载巩固</td></tr>
+        <tr><td>作业完成</td><td>改错作业，携带思考结果咨询，禁止无思考提问</td></tr>
+        <tr><td>应试技巧</td><td>由数据范围反推时间复杂度，合理使用骗分技巧</td></tr>
+      </tbody>
+    </table></div></div>
+
+    <h2>1.6 四道例题解析</h2>
+    <div class="card"><div class="table-wrap"><table>
+      <thead><tr><th>题目</th><th>题目规则</th><th>解法要点</th><th>数据结构</th><th>复杂度</th></tr></thead>
+      <tbody>
+        <tr><td>校园打卡题</td><td>打卡有效 8:00-22:00 分时段计分，同人仅留最早有效记录，输出总分与字典序最小最高分</td><td>map 存学号-得分，仅首次出现计分，重复忽略</td><td>map</td><td>O(NlogN)</td></tr>
+        <tr><td>机器人扫地题</td><td>两端墙中间 n 格走廊，机器人碰墙 / 灰尘格反转，灰尘清扫后永久变干净，求清扫全部灰尘总秒数</td><td>暴力 O(n²) 仅过前 8 点得约 45 分；灰尘入 set + 墙作哨兵，跳转最近灰尘，删当前反转方向</td><td>set + 二分</td><td>O(nlogn)</td></tr>
+        <tr><td>村庄朋友统计题</td><td>同校距离 ≤K1、不同校距离 ≤K2 为朋友，统计每人朋友数，数据 5×10⁵</td><td>按坐标排序后二分定位距离范围，结合学校去重</td><td>排序 + 二分</td><td>O(NlogN)</td></tr>
+        <tr><td>万能密钥题</td><td>N 个长度 M 互不相同 01 串，生成与每个密钥至少一位相同的万能密钥，输出任意一个</td><td>密钥取反入 set，遍历 0~2²⁰，首个不在 set 的值为答案</td><td>set</td><td>O(2²⁰)</td></tr>
+      </tbody>
+    </table></div></div>
+
+    <nav class="chapter-grid" style="margin-top:24px;">
+      <a class="chapter-card" href="day1.html"><span class="tag">返回</span><h4>day1 首页</h4></a>
+      <a class="chapter-card" href="day1-night.html"><span class="tag">下一页</span><h4>day1 · 晚上 —— 算法实现逻辑</h4></a>
+    </nav>
+  
+    <nav class="pager"><a class="pager-next" href="day1-night.html">下一页：day1 晚上 · 算法实现逻辑 <span class="pg-ico">→</span></a></nav>
+  </main>
+
+  <footer class="site-footer">编程竞赛知识点与例题学习笔记</footer>
+  <script src="main.js"></script>
+</body>
+</html>

@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>day1 · 总结 · 编程竞赛笔记</title>
+  <link rel="icon" type="image/x-icon" href="icon.ico">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="site-header">
+    <div class="inner">
+      <a class="brand" href="index.html"><img class="brand-ico" src="icon.ico" alt="">编程竞赛笔记</a>
+            <nav class="site-nav">
+        <a href="index.html">首页</a>
+        <a href="day1.html" class="active">day1</a>
+        <a href="day2.html">day2</a>
+        <a href="day3.html">day3</a>
+        <a href="dfs-bfs.html">day4</a>
+        <div class="nav-drop">
+          <span class="nav-drop-btn">其他 ▾</span>
+          <div class="drop-menu">
+            <a href="topics-basic.html">基础语法</a>
+            <a href="topics-algo.html">基础算法</a>
+            <a href="topics-string.html">字符串</a>
+            <a href="topics-dp.html">动态规划</a>
+            <a href="stl-containers.html">STL容器</a>
+            <a href="topics-graph.html">图论</a>
+            <a href="topics-math.html">数学</a>
+            <a href="topics-round.html">周赛题解</a>
+            <a href="topics-prelim.html">初赛篇</a>
+            <a href="summary.html">学习总结</a>
+          </div>
+        </div>
+      </nav>
+    </div>
+</header>
+
+  <main class="main"><nav class="crumb"><a href="index.html">首页</a><span class="sep">›</span><a href="day1.html">day1</a><span class="sep">›</span><span>学习总结</span></nav>
+    <div class="hero"><span class="hero-ico">✅</span><h1>day1 学习总结</h1><p class="subtitle">核心工具 · 四道例题 · 实现逻辑</p></div>
+
+    <h2>知识点动态图</h2>
+    <div class="card">
+      <div class="struct">
+        <div class="root">day1 总结</div>
+        <div class="branch">
+          <div class="col">
+            <span class="node c-blue"><span class="ico">🧰</span><span class="txt">核心工具<br>map · set · 二分</span></span>
+            <div class="branch">
+              <div class="col"><span class="node c-slate">map · 红黑树<br>键值对唯一升序</span></div>
+              <div class="col"><span class="node c-slate">set · 去重排序<br>仅存唯一键</span></div>
+              <div class="col"><span class="node c-slate">bound 二分<br>lower / upper_bound</span></div>
+            </div>
+          </div>
+          <div class="col">
+            <span class="node c-teal"><span class="ico">📝</span><span class="txt">四道例题</span></span>
+            <div class="branch">
+              <div class="col"><span class="node c-slate">校园打卡 · map</span></div>
+              <div class="col"><span class="node c-slate">机器人扫地 · set</span></div>
+              <div class="col"><span class="node c-slate">村庄朋友 · 二分</span></div>
+              <div class="col"><span class="node c-slate">万能密钥 · set</span></div>
+            </div>
+          </div>
+          <div class="col">
+            <span class="node c-orange"><span class="ico">⚙️</span><span class="txt">实现逻辑</span></span>
+            <div class="branch">
+              <div class="col"><span class="node c-slate">机器人扫地<br>upper_bound · erase</span></div>
+              <div class="col"><span class="node c-slate">朋友统计<br>sum1+sum2−sum3</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <h2>总体概览</h2>
+    <div class="card">
+      <p class="lead">day1 覆盖了核心容器工具（map / set / bound 二分）、提交规范与作业要求，并通过四道例题（校园打卡、机器人扫地、村庄朋友统计、万能密钥）把工具落地，晚上又深入讲解了机器人扫地与朋友统计的实现逻辑。</p>
+    </div>
+
+    <h2>核心知识点一览</h2>
+    <div class="card"><div class="table-wrap"><table>
+      <thead><tr><th>主题</th><th>关键内容</th><th>复杂度</th></tr></thead>
+      <tbody>
+        <tr><td>map</td><td>红黑树，键值对，键唯一自动升序；count / [] / insert / erase</td><td>O(logN)</td></tr>
+        <tr><td>set</td><td>与 map 同底层，仅存唯一键，自动去重排序</td><td>O(logN)</td></tr>
+        <tr><td>bound 二分</td><td>lower_bound ≥目标，upper_bound &gt;目标；二者差 = 出现次数</td><td>O(logN)</td></tr>
+        <tr><td>提交规范</td><td>对比 .in/.out 校验结果；时间分配；文件 ≤ 100 KB</td><td>—</td></tr>
+      </tbody>
+    </table></div></div>
+
+    <h2>四道例题要点</h2>
+    <div class="card"><div class="table-wrap"><table>
+      <thead><tr><th>题目</th><th>数据结构</th><th>解法要点</th></tr></thead>
+      <tbody>
+        <tr><td>校园打卡</td><td>map</td><td>map 存学号-得分，仅首次出现计分</td></tr>
+        <tr><td>机器人扫地</td><td>set + 二分</td><td>灰尘入 set + 墙作哨兵，跳转最近灰尘</td></tr>
+        <tr><td>村庄朋友统计</td><td>排序 + 二分</td><td>按坐标排序后二分定位距离范围，结合学校去重</td></tr>
+        <tr><td>万能密钥</td><td>set</td><td>密钥取反入 set，遍历 0~2²⁰ 找答案</td></tr>
+      </tbody>
+    </table></div></div>
+
+    <h2>实现逻辑要点</h2>
+    <div class="card">
+      <ul>
+        <li><strong>机器人扫地</strong>：upper_bound / find 定位、`*it` 解引用、`erase(it)` 删除、`it--` 反向查找、条件外置。</li>
+        <li><strong>朋友统计</strong>：sum1+sum2−sum3 公式；学校编号大用 `map&lt;int, vector&lt;int&gt;&gt;`；排序只对备份数组。</li>
+      </ul>
+    </div>
+
+    <nav class="chapter-grid" style="margin-top:24px;">
+      <a class="chapter-card" href="day1.html"><span class="tag">返回</span><h4>day1 首页</h4></a>
+      <a class="chapter-card" href="day1-pm.html"><span class="tag">章节</span><h4>day1 · 下午 —— 核心工具与例题</h4></a>
+      <a class="chapter-card" href="day1-night.html"><span class="tag">章节</span><h4>day1 · 晚上 —— 算法实现逻辑</h4></a>
+    </nav>
+  
+    <nav class="pager"><a class="pager-next" href="day2.html">下一页：day2 · STL 与贪心·前缀和 <span class="pg-ico">→</span></a></nav>
+  </main>
+
+  <footer class="site-footer">编程竞赛知识点与例题学习笔记</footer>
+  <script src="main.js"></script>
+</body>
+</html>

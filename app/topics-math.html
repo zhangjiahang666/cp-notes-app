@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>专题 · 数学 · 编程竞赛笔记</title>
+  <link rel="icon" type="image/x-icon" href="icon.ico">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="site-header">
+    <div class="inner">
+      <a class="brand" href="index.html"><img class="brand-ico" src="icon.ico" alt="">编程竞赛笔记</a>
+            <nav class="site-nav">
+        <a href="index.html">首页</a>
+        <a href="day1.html">day1</a>
+        <a href="day2.html">day2</a>
+        <a href="day3.html">day3</a>
+        <a href="dfs-bfs.html">day4</a>
+        <div class="nav-drop">
+          <span class="nav-drop-btn">其他 ▾</span>
+          <div class="drop-menu">
+            <a href="topics-basic.html">基础语法</a>
+            <a href="topics-algo.html">基础算法</a>
+            <a href="topics-string.html">字符串</a>
+            <a href="topics-dp.html">动态规划</a>
+            <a href="stl-containers.html">STL容器</a>
+            <a href="topics-graph.html">图论</a>
+            <a href="topics-math.html" class="active">数学</a>
+            <a href="topics-round.html">周赛题解</a>
+            <a href="topics-prelim.html">初赛篇</a>
+            <a href="summary.html">学习总结</a>
+          </div>
+        </div>
+      </nav>
+    </div>
+  </header>
+
+  <main class="main"><nav class="crumb"><a href="index.html">首页</a><span class="sep">›</span><span>专题 · 数学</span></nav>
+    <div class="hero"><span class="hero-ico">➗</span><h1>专题 · 数学</h1><p class="subtitle">模运算 · 质数判定 / 筛法 · 质因子分解 · gcd / 快速幂 · 排列组合 · 逆元 · 线性代数</p></div>
+
+    <h2>一、模运算</h2>
+    <div class="card">
+      <div class="table-wrap"><table>
+        <thead><tr><th>运算</th><th>公式</th><th>注意</th></tr></thead>
+        <tbody>
+          <tr><td>加法</td><td>(a+b) % m = (a%m + b%m) % m</td><td>直接取模即可</td></tr>
+          <tr><td>减法</td><td>(a-b) % m</td><td>结果可能是负数，先加 m 再取模</td></tr>
+          <tr><td>乘法</td><td>(a×b) % m</td><td>先分别取模再相乘；大数相乘可能爆 long long</td></tr>
+          <tr><td>除法</td><td>a/b 对模意义</td><td>不能直接取模，要用「乘法逆元」</td></tr>
+        </tbody>
+      </table></div>
+      <div class="tip">负数取模写法：<code>((a % m) + m) % m</code>；乘法取模溢出时用 <code>__int128</code> 或快速乘。</div>
+    </div>
+
+    <h2>二、质数判定</h2>
+    <div class="card">
+      <p class="lead">只需枚举到 √n：若 n 有大于 √n 的因子，必有小于 √n 的因子。单次判定 O(√n)。</p>
+      <pre class="codebox"><code>#include &lt;bits/stdc++.h&gt;
+using namespace std;
+
+bool is_prime(long long x) {
+  if (x &lt; 2) return false;
+  for (long long i = 2; i * i &lt;= x; i++)
+    if (x % i == 0) return false;
+  return true;
+}
+
+int main() {
+  int n; cin &gt;&gt; n;
+  cout &lt;&lt; (is_prime(n) ? "是质数" : "不是质数") &lt;&lt; "\n";
+  return 0;
+}</code></pre>
+      <div class="note">注意 <code>i*i &lt;= x</code> 可能溢出 int，x 用 long long 且 i 同步用 long long。</div>
+    </div>
+
+    <h2>三、筛法（批量求质数）</h2>
+    <div class="card">
+      <div class="table-wrap"><table>
+        <thead><tr><th>方法</th><th>时间</th><th>特点</th></tr></thead>
+        <tbody>
+          <tr><td>埃氏筛</td><td>O(n log log n)</td><td>把每个质数的倍数标成合数；实现简单，n≤10⁷ 可用</td></tr>
+          <tr><td>欧拉筛</td><td>O(n)</td><td>每个合数只被最小质因子筛一次；顺带能记录最小质因子</td></tr>
+          <tr><td>区间筛</td><td>O(R + (R-L+1) log log R)</td><td>R 很大（如 10¹²）但区间 R-L 小（≤10⁶）时用</td></tr>
+        </tbody>
+      </table></div>
+      <pre class="codebox"><code>#include &lt;bits/stdc++.h&gt;
+using namespace std;
+const int N = 1000005;
+bool vis[N];          // vis[i]=true 表示 i 是合数
+int p[N], cnt;        // p[]: 筛出的质数表
+
+void euler(int n) {   // 欧拉筛：每个合数只被最小质因子筛一次
+  vis[0] = vis[1] = true;
+  for (int i = 2; i &lt;= n; i++) {
+    if (!vis[i]) p[++cnt] = i;
+    for (int j = 1; j &lt;= cnt &amp;&amp; i * p[j] &lt;= n; j++) {
+      vis[i * p[j]] = true;
+      if (i % p[j] == 0) break;   // 保证只由最小质因子筛掉
+    }
+  }
+}
+
+int main() {
+  int n; cin &gt;&gt; n;
+  euler(n);
+  for (int i = 1; i &lt;= cnt; i++) cout &lt;&lt; p[i] &lt;&lt; " ";
+  return 0;
+}</code></pre>
+      <p class="lead">埃氏筛更短：外层 <code>for i=2..n</code> 若 <code>!vis[i]</code> 则内层 <code>for j=i*i;j&lt;=n;j+=i</code> 标合数即可。质数分布：n 以内约有 n/ln n 个质数。</p>
+    </div>
+
+    <h2>四、质因子分解</h2>
+    <div class="card">
+      <p class="lead"><b>唯一分解定理</b>：任意正整数 n 可唯一写成 n = p₁^a₁ × p₂^a₂ × … × pₖ^aₖ。枚举到 √n 试除，最后剩余的 n&gt;1 必是大质因子。</p>
+      <pre class="codebox"><code>#include &lt;bits/stdc++.h&gt;
+using namespace std;
+
+void factor(int n) {
+  for (int i = 2; i * i &lt;= n; i++) {
+    if (n % i == 0) {
+      int c = 0;
+      while (n % i == 0) { n /= i; c++; }
+      cout &lt;&lt; i &lt;&lt; "^" &lt;&lt; c &lt;&lt; "  ";
+    }
+  }
+  if (n != 1) cout &lt;&lt; n &lt;&lt; "^1";   // 剩下的大质因子
+  cout &lt;&lt; "\n";
+}
+
+int main() {
+  int n; cin &gt;&gt; n;
+  factor(n);
+  return 0;
+}</code></pre>
+      <div class="tip"><b>约数个数定理</b>：d(n) = (a₁+1)(a₂+1)…(aₖ+1)（每个质因子选 0~aᵢ 次）。<b>约数和定理</b>：s(n)=∏(pᵢ^(aᵢ+1)−1)/(pᵢ−1)。</div>
+      <p class="lead">海量分解（10⁶ 个数）技巧：先用欧拉筛预处理每个数的最小质因子 f[i]，然后不断 <code>n /= f[n]</code>，单次分解 O(log n)。</p>
+    </div>
+
+    <h2>五、gcd 与 lcm</h2>
+    <div class="card">
+      <pre class="codebox"><code>#include &lt;bits/stdc++.h&gt;
+using namespace std;
+typedef long long ll;
+
+ll gcd(ll a, ll b) { return b ? gcd(b, a % b) : a; }  // 辗转相除
+ll lcm(ll a, ll b) { return a / gcd(a, b) * b; }      // 先除后乘防溢出
+
+int main() {
+  ll a, b; cin &gt;&gt; a &gt;&gt; b;
+  cout &lt;&lt; gcd(a, b) &lt;&lt; " " &lt;&lt; lcm(a, b) &lt;&lt; "\n";
+  return 0;
+}</code></pre>
+      <p class="lead">C++17 可直接用 <code>std::gcd</code> / <code>std::lcm</code>（&lt;numeric&gt;）。</p>
+    </div>
+
+    <h2>六、快速幂</h2>
+    <div class="card">
+      <p class="lead">把指数拆成二进制，底数反复平方，O(log n) 求 a^b % m。</p>
+      <pre class="codebox"><code>#include &lt;bits/stdc++.h&gt;
+using namespace std;
+typedef long long ll;
+
+ll qpow(ll a, ll b, ll m) {
+  ll r = 1 % m;
+  while (b) {
+    if (b &amp; 1) r = r * a % m;
+    a = a * a % m;
+    b &gt;&gt;= 1;
+  }
+  return r;
+}
+
+int main() {
+  ll a, b, m; cin &gt;&gt; a &gt;&gt; b &gt;&gt; m;
+  cout &lt;&lt; qpow(a, b, m) &lt;&lt; "\n";
+  return 0;
+}</code></pre>
+    </div>
+
+    <h2>七、排列组合</h2>
+    <div class="card">
+      <div class="table-wrap"><table>
+        <thead><tr><th>公式</th><th>写法</th></tr></thead>
+        <tbody>
+          <tr><td>排列</td><td>P(n,k) = n! / (n−k)!</td></tr>
+          <tr><td>组合</td><td>C(n,k) = n! / (k! (n−k)!)</td></tr>
+          <tr><td>递推（杨辉三角）</td><td>C(n,k) = C(n−1,k−1) + C(n−1,k)</td></tr>
+        </tbody>
+      </table></div>
+      <pre class="codebox"><code>#include &lt;bits/stdc++.h&gt;
+using namespace std;
+typedef long long ll;
+const ll MOD = 1e9 + 7;
+const int N = 100005;
+ll fac[N], inv[N];
+
+ll qpow(ll a, ll b) {
+  ll r = 1;
+  while (b) { if (b &amp; 1) r = r * a % MOD; a = a * a % MOD; b &gt;&gt;= 1; }
+  return r;
+}
+
+void pre() {                    // 预处理阶乘与阶乘逆元
+  fac[0] = 1;
+  for (int i = 1; i &lt; N; i++) fac[i] = fac[i - 1] * i % MOD;
+  inv[N - 1] = qpow(fac[N - 1], MOD - 2);   // 费马小定理求逆元
+  for (int i = N - 2; i &gt;= 0; i--) inv[i] = inv[i + 1] * (i + 1) % MOD;
+}
+
+ll C(int n, int k) {
+  if (k &lt; 0 || k &gt; n) return 0;
+  return fac[n] * inv[k] % MOD * inv[n - k] % MOD;
+}</code></pre>
+    </div>
+
+    <h2>八、二项式定理</h2>
+    <div class="card">
+      <p class="lead">(a+b)ⁿ = Σ C(n,k)·a^k·b^(n−k)。由它可得：ΣC(n,k)=2ⁿ；奇偶项和相等。</p>
+    </div>
+
+    <h2>九、exgcd 与乘法逆元</h2>
+    <div class="card">
+      <p class="lead">逆元：a·x ≡ 1 (mod m)，x 记作 a⁻¹；除法取模 = 乘逆元。<b>费马小定理</b>：m 为质数时 a⁻¹ = a^(m−2) mod m（即上面的快速幂）。</p>
+      <pre class="codebox"><code>#include &lt;bits/stdc++.h&gt;
+using namespace std;
+typedef long long ll;
+
+ll exgcd(ll a, ll b, ll &amp;x, ll &amp;y) {   // 解 ax+by=gcd(a,b)
+  if (!b) { x = 1; y = 0; return a; }
+  ll g = exgcd(b, a % b, y, x);
+  y -= a / b * x;
+  return g;
+}
+
+ll inv_mod(ll a, ll m) {   // 求逆元：m 不要求是质数
+  ll x, y; exgcd(a, m, x, y);
+  return (x % m + m) % m;
+}
+
+int main() {
+  ll a, m; cin &gt;&gt; a &gt;&gt; m;
+  cout &lt;&lt; inv_mod(a, m) &lt;&lt; "\n";
+  return 0;
+}</code></pre>
+    </div>
+
+    <h2>十、鸽笼原理</h2>
+    <div class="card">
+      <p class="lead">n+1 只鸽子放进 n 个笼子，至少一个笼子有 ≥2 只。常用：抽屉原理证存在性、求余数分类（mod n 下必有重复余数）。</p>
+    </div>
+
+    <h2>十一、线性代数（向量与矩阵）</h2>
+    <div class="card">
+      <p class="lead">向量点积 a·b = Σ aᵢbᵢ；矩阵乘法 C[i][j] = Σ A[i][k]·B[k][j]。矩阵快速幂可加速递推（如斐波那契数列 O(log n)）。</p>
+      <pre class="codebox"><code>#include &lt;bits/stdc++.h&gt;
+using namespace std;
+typedef long long ll;
+const int N = 105;
+ll a[N][N], b[N][N], c[N][N];
+
+int main() {
+  int n, m, p; cin &gt;&gt; n &gt;&gt; m &gt;&gt; p;      // a: n*m, b: m*p
+  for (int i = 1; i &lt;= n; i++)
+    for (int j = 1; j &lt;= m; j++) cin &gt;&gt; a[i][j];
+  for (int i = 1; i &lt;= m; i++)
+    for (int j = 1; j &lt;= p; j++) cin &gt;&gt; b[i][j];
+  for (int i = 1; i &lt;= n; i++)
+    for (int k = 1; k &lt;= m; k++)
+      for (int j = 1; j &lt;= p; j++)
+        c[i][j] += a[i][k] * b[k][j];   // 注意累加可能超 int
+  for (int i = 1; i &lt;= n; i++, cout &lt;&lt; "\n")
+    for (int j = 1; j &lt;= p; j++) cout &lt;&lt; c[i][j] &lt;&lt; " ";
+  return 0;
+}</code></pre>
+    </div>
+
+    <div class="tip"><b>速记</b>：判质数试除到 √n；批量质数上欧拉筛；分解质因数试除 + 最小质因子加速；gcd 辗转相除；除法取模找逆元（费马小定理/ exgcd）。</div>
+
+    <nav class="chapter-grid" style="margin-top:24px;">
+      <a class="chapter-card" href="index.html"><span class="tag">返回</span><h4>返回首页</h4><p>回到站点总览</p></a>
+      <a class="chapter-card" href="topics-graph.html"><span class="tag">上一专题</span><h4>图论专题</h4><p>图的存储 · 图的遍历</p></a>
+      <a class="chapter-card" href="summary.html"><span class="tag">汇总</span><h4>学习总结</h4><p>核心知识点一览 · 方法论</p></a>
+    </nav>
+
+    <nav class="pager"><a class="pager-next" href="index.html">返回首页 <span class="pg-ico">→</span></a></nav>
+  </main>
+
+  <footer class="site-footer">编程竞赛知识点与例题学习笔记</footer>
+  <script src="main.js"></script>
+</body>
+</html>

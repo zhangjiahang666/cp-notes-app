@@ -1,0 +1,36 @@
+{
+  "name": "cp-notes",
+  "version": "1.0.0",
+  "description": "C++ 笔记桌面应用",
+  "main": "app/electron-main.js",
+  "scripts": {
+    "start": "electron .",
+    "dist": "electron-builder --win portable"
+  },
+  "build": {
+    "appId": "com.cpnotes.app",
+    "productName": "cp-notes-study",
+    "files": ["app/**/*"],
+    "directories": { "output": "dist" },
+    "win": {
+      "target": ["portable"],
+      "icon": "build/icon.ico"
+    },
+    "portable": { "artifactName": "编程竞赛学习笔记.exe" },
+    "linux": {
+      "target": ["AppImage"],
+      "icon": "build/icon.png",
+      "category": "Utility",
+      "artifactName": "cp-notes-study-${version}.AppImage"
+    },
+    "mac": {
+      "target": ["dmg"],
+      "icon": "build/icon.png",
+      "artifactName": "cp-notes-study-${version}.dmg"
+    }
+  },
+  "devDependencies": {
+    "electron": "^31.7.7",
+    "electron-builder": "^24.13.3"
+  }
+}

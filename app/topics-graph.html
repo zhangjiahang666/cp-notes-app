@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>专题 · 图论 · 编程竞赛笔记</title>
+  <link rel="icon" type="image/x-icon" href="icon.ico">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="site-header">
+    <div class="inner">
+      <a class="brand" href="index.html"><img class="brand-ico" src="icon.ico" alt="">编程竞赛笔记</a>
+            <nav class="site-nav">
+        <a href="index.html">首页</a>
+        <a href="day1.html">day1</a>
+        <a href="day2.html">day2</a>
+        <a href="day3.html">day3</a>
+        <a href="dfs-bfs.html">day4</a>
+        <div class="nav-drop">
+          <span class="nav-drop-btn">其他 ▾</span>
+          <div class="drop-menu">
+            <a href="topics-basic.html">基础语法</a>
+            <a href="topics-algo.html">基础算法</a>
+            <a href="topics-string.html">字符串</a>
+            <a href="topics-dp.html">动态规划</a>
+            <a href="stl-containers.html">STL容器</a>
+            <a href="topics-graph.html" class="active">图论</a>
+            <a href="topics-math.html">数学</a>
+            <a href="topics-round.html">周赛题解</a>
+            <a href="topics-prelim.html">初赛篇</a>
+            <a href="summary.html">学习总结</a>
+          </div>
+        </div>
+      </nav>
+    </div>
+  </header>
+
+  <main class="main"><nav class="crumb"><a href="index.html">首页</a><span class="sep">›</span><span>专题 · 图论</span></nav>
+    <div class="hero"><span class="hero-ico">🔗</span><h1>专题 · 图论</h1><p class="subtitle">图的相关概念 · 图的存储（邻接表 / 链式前向星）· 图的遍历（DFS / BFS / 0-1 BFS）</p></div>
+
+    <h2>一、图的基本概念</h2>
+    <div class="card">
+      <p class="lead">图是二元组 <b>G=(V,E)</b>：V 为点集（顶点/节点），E 为边集；点数 |V| 称为图的<b>阶</b>。</p>
+      <div class="table-wrap"><table>
+        <thead><tr><th>分类</th><th>说明</th></tr></thead>
+        <tbody>
+          <tr><td>无向图</td><td>边是无序对 (u,v)</td></tr>
+          <tr><td>有向图</td><td>边是有序对 (u,v)，写作 u→v</td></tr>
+          <tr><td>混合图 / 赋权图</td><td>同时含两种边 / 边带权值</td></tr>
+          <tr><td>简单图 / 多重图</td><td>无自环且无重边 / 允许自环、重边（竞赛默认允许，需注意题意）</td></tr>
+          <tr><td>稀疏图 / 稠密图</td><td>边数远小于 |V|² / 接近 |V|²（决定算法选择）</td></tr>
+        </tbody>
+      </table></div>
+      <h3>度数（Degree）</h3>
+      <p class="lead">无向图中 d(v) 为与 v 相连的边数；有向图中分出度 d+(v) 与入度 d−(v)。d(v)=0 孤立点，d(v)=1 叶节点。</p>
+      <div class="tip"><b>握手定理</b>：无向图 ∑d(v) = 2|E|（每条边贡献 2 度）⟹ <b>奇点数量一定为偶数</b>，常用作判错。</div>
+      <h3>路径与连通性</h3>
+      <div class="table-wrap"><table>
+        <thead><tr><th>术语</th><th>含义</th></tr></thead>
+        <tbody>
+          <tr><td>路径 Path / 回路 Circuit</td><td>不重复点的迹 / 起点等于终点的迹</td></tr>
+          <tr><td>环 Cycle</td><td>起点=终点且中间不重复点的回路（简单回路）</td></tr>
+          <tr><td>连通分量（无向）</td><td>极大连通子图；连通图=任意两点连通</td></tr>
+          <tr><td>强连通分量（有向）</td><td>任意两点互相可达的极大子图</td></tr>
+        </tbody>
+      </table></div>
+      <p class="lead">补图：相同点集、补上所有缺失边的图；反图：有向图所有边方向反转。</p>
+    </div>
+
+    <h2>二、图的存储</h2>
+    <div class="card">
+      <div class="table-wrap"><table>
+        <thead><tr><th>方式</th><th>实现</th><th>复杂度</th><th>适用</th></tr></thead>
+        <tbody>
+          <tr><td>直接存边</td><td>结构体数组存 (u,v,w)</td><td>遍历 O(m)</td><td>Kruskal 等边操作</td></tr>
+          <tr><td>邻接矩阵</td><td>g[u][v] 存权（0/1/∞）</td><td>查询 O(1)、遍历 O(n²)</td><td>稠密图、n≤2000</td></tr>
+          <tr><td>邻接表</td><td>vector&lt;pair&gt; adj[u]</td><td>O(n+m)</td><td>最常用，简单好写</td></tr>
+          <tr><td>链式前向星</td><td>head/to/w/nxt 数组</td><td>O(n+m)</td><td>性能极致、竞赛常用</td></tr>
+        </tbody>
+      </table></div>
+      <h3>邻接表（推荐）</h3>
+      <pre class="codebox"><code>#include &lt;bits/stdc++.h&gt;
+using namespace std;
+const int N = 100005;
+vector&lt;pair&lt;int,int&gt;&gt; adj[N];   // adj[u]: (终点 v, 边权 w)
+
+int main() {
+  int n, m; cin &gt;&gt; n &gt;&gt; m;
+  for (int i = 1; i &lt;= m; i++) {
+    int u, v, w; cin &gt;&gt; u &gt;&gt; v &gt;&gt; w;
+    adj[u].push_back({v, w});
+    adj[v].push_back({u, w});   // 无向图加双向
+  }
+  for (int u = 1; u &lt;= n; u++)
+    for (auto [v, w] : adj[u])
+      cout &lt;&lt; u &lt;&lt; " -&gt; " &lt;&lt; v &lt;&lt; " (" &lt;&lt; w &lt;&lt; ")\n";
+  return 0;
+}</code></pre>
+      <h3>链式前向星</h3>
+      <pre class="codebox"><code>#include &lt;bits/stdc++.h&gt;
+using namespace std;
+const int N = 100005, M = 200005;
+struct Edge { int to, w, nxt; } e[M];
+int head[N], tot;
+
+void add(int u, int v, int w) {   // 头插法加边
+  e[++tot] = {v, w, head[u]};
+  head[u] = tot;
+}
+
+int main() {
+  int n, m; cin &gt;&gt; n &gt;&gt; m;
+  for (int i = 1; i &lt;= m; i++) {
+    int u, v, w; cin &gt;&gt; u &gt;&gt; v &gt;&gt; w;
+    add(u, v, w);
+  }
+  for (int u = 1; u &lt;= n; u++)
+    for (int i = head[u]; i; i = e[i].nxt)
+      cout &lt;&lt; u &lt;&lt; " -&gt; " &lt;&lt; e[i].to &lt;&lt; " (" &lt;&lt; e[i].w &lt;&lt; ")\n";
+  return 0;
+}</code></pre>
+      <div class="note">邻接矩阵遍历是 O(n²)，大图一定用邻接表或前向星，才能做到线性 O(n+m)。</div>
+    </div>
+
+    <h2>三、图的遍历</h2>
+    <div class="card">
+      <h3>DFS 深度优先搜索</h3>
+      <p class="lead">递归访问每个未访问的邻接点，vis[] 防重复。适用于连通块遍历、图染色、拓扑排序、强连通分量、回溯搜索。</p>
+      <pre class="codebox"><code>bool vis[N];
+void dfs(int u) {
+  vis[u] = true;
+  for (int i = head[u]; i; i = e[i].nxt) {
+    int v = e[i].to;
+    if (!vis[v]) dfs(v);
+  }
+}</code></pre>
+      <h3>BFS 广度优先搜索</h3>
+      <p class="lead">按层扩展（队列），由于层次性天然求<b>无权图最短路径</b>：dis[v]=dis[u]+1，pre[] 记录前驱用于路径还原。</p>
+      <pre class="codebox"><code>int dis[N], pre[N];
+
+void bfs(int s) {
+  queue&lt;int&gt; q;
+  q.push(s); vis[s] = true;
+  dis[s] = 0; pre[s] = -1;
+  while (!q.empty()) {
+    int u = q.front(); q.pop();
+    for (int i = head[u]; i; i = e[i].nxt) {
+      int v = e[i].to;
+      if (!vis[v]) {
+        vis[v] = true;
+        dis[v] = dis[u] + 1;
+        pre[v] = u;
+        q.push(v);
+      }
+    }
+  }
+}
+
+void restore(int x) {            // 还原 s -&gt; x 的路径
+  vector&lt;int&gt; res;
+  for (int v = x; v != -1; v = pre[v]) res.push_back(v);
+  reverse(res.begin(), res.end());
+  for (int v : res) cout &lt;&lt; v &lt;&lt; ' ';
+}</code></pre>
+      <h3>0-1 BFS 与优先队列 BFS</h3>
+      <div class="table-wrap"><table>
+        <thead><tr><th>变体</th><th>适用</th><th>核心</th><th>复杂度</th></tr></thead>
+        <tbody>
+          <tr><td>0-1 BFS</td><td>边权只有 0/1</td><td>0 权入队首、1 权入队尾，队内代价单调</td><td>O(n+m)</td></tr>
+          <tr><td>优先队列 BFS</td><td>状态图最短路</td><td>最小堆取总代价最小节点，首次出队才处理</td><td>O((n+m)log n)</td></tr>
+        </tbody>
+      </table></div>
+      <pre class="codebox"><code>// 0-1 BFS 模板（边权 0 或 1）
+deque&lt;int&gt; dq;
+dq.push_front(s); dis[s] = 0;
+while (!dq.empty()) {
+  int u = dq.front(); dq.pop_front();
+  for (auto [v, w] : adj[u]) {
+    if (dis[v] &gt; dis[u] + w) {
+      dis[v] = dis[u] + w;
+      if (w == 0) dq.push_front(v);   // 0 权放队首
+      else        dq.push_back(v);    // 1 权放队尾
+    }
+  }
+}</code></pre>
+    </div>
+
+    <div class="tip"><b>速记</b>：DFS 走到底再回头（回溯、方案数）；BFS 一层一层推（最短路径、最少步数）；0-1 BFS 是带权 BFS 的轻量版；边权任意正数则上 Dijkstra。</div>
+
+    <nav class="chapter-grid" style="margin-top:24px;">
+      <a class="chapter-card" href="index.html"><span class="tag">返回</span><h4>返回首页</h4><p>回到站点总览</p></a>
+      <a class="chapter-card" href="topics-math.html"><span class="tag">下一专题</span><h4>数学专题</h4><p>质数 · 筛法 · gcd · 快速幂 · 排列组合</p></a>
+      <a class="chapter-card" href="summary.html"><span class="tag">汇总</span><h4>学习总结</h4><p>核心知识点一览 · 方法论</p></a>
+    </nav>
+
+    <nav class="pager"><a class="pager-next" href="index.html">返回首页 <span class="pg-ico">→</span></a></nav>
+  </main>
+
+  <footer class="site-footer">编程竞赛知识点与例题学习笔记</footer>
+  <script src="main.js"></script>
+</body>
+</html>

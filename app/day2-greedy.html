@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>day2·上午 —— 贪心算法与前缀和 · 编程竞赛笔记</title>
+  <link rel="icon" type="image/x-icon" href="icon.ico">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="site-header">
+    <div class="inner">
+      <a class="brand" href="index.html"><img class="brand-ico" src="icon.ico" alt="">编程竞赛笔记</a>
+            <nav class="site-nav">
+        <a href="index.html">首页</a>
+        <a href="day1.html">day1</a>
+        <a href="day2.html" class="active">day2</a>
+        <a href="day3.html">day3</a>
+        <a href="dfs-bfs.html">day4</a>
+        <div class="nav-drop">
+          <span class="nav-drop-btn">其他 ▾</span>
+          <div class="drop-menu">
+            <a href="topics-basic.html">基础语法</a>
+            <a href="topics-algo.html">基础算法</a>
+            <a href="topics-string.html">字符串</a>
+            <a href="topics-dp.html">动态规划</a>
+            <a href="stl-containers.html">STL容器</a>
+            <a href="topics-graph.html">图论</a>
+            <a href="topics-math.html">数学</a>
+            <a href="topics-round.html">周赛题解</a>
+            <a href="topics-prelim.html">初赛篇</a>
+            <a href="summary.html">学习总结</a>
+          </div>
+        </div>
+      </nav>
+    </div>
+</header>
+
+  <main class="main"><nav class="crumb"><a href="index.html">首页</a><span class="sep">›</span><a href="day2.html">day2</a><span class="sep">›</span><span>贪心与前缀和</span></nav>
+    <div class="hero"><span class="hero-ico">⚖️</span><h1>day2 · 上午 —— 贪心算法与前缀和</h1><p class="subtitle">贪心标准流程 · 典型案例 · 一维 / 二维前缀和 · 算法流程图</p></div>
+
+    <h2>4.1 贪心算法</h2>
+    <div class="card"><div class="table-wrap"><table>
+      <thead><tr><th>知识点</th><th>核心要点</th><th>实现 / 公式</th><th>复杂度</th></tr></thead>
+      <tbody>
+        <tr><td>贪心标准流程</td><td>先找局部最优解，再反证验证；有漏洞补约束</td><td>局部最优解 + 反证法</td><td>—</td></tr>
+        <tr><td>找零案例</td><td>每步选不超过剩余金额的最大面额，张数最少</td><td>每步选最大可用面额</td><td>O(n)</td></tr>
+        <tr><td>排队接水</td><td>接水时长短者在前，总等待最小</td><td>升序排序；暴力 / 前缀和 / 第 i 位乘 n−i 三种求和</td><td>O(n)</td></tr>
+        <tr><td>合并果子</td><td>每次合并重量最小的两堆，总体力最小</td><td>小顶堆优先队列</td><td>O(nlogn)</td></tr>
+        <tr><td>贪心延伸</td><td>常与二分答案、枚举优化结合，极少独立考</td><td>结构体排序配合；二分 / 数学 / 数据结构优化</td><td>—</td></tr>
+      </tbody>
+    </table></div>
+    <div class="note">⚠️ 贪心必须经证明；得分核心在策略推导与验证，不在代码；特殊面额组合（50/30/20 找 60）贪心失效需验证。</div>
+    </div>
+
+    <h2>4.2 前缀和</h2>
+    <div class="card"><div class="table-wrap"><table>
+      <thead><tr><th>知识点</th><th>核心要点</th><th>公式</th><th>复杂度</th></tr></thead>
+      <tbody>
+        <tr><td>一维前缀和</td><td>区间和 O(1) 查询</td><td><code>[l,r] 和 = S[r] - S[l-1]</code></td><td>O(1) 查询</td></tr>
+        <tr><td>二维前缀和存储</td><td>上方 + 左侧 − 左上角 + 当前元素</td><td><code>S[i][j]=S[i-1][j]+S[i][j-1]-S[i-1][j-1]+a[i][j]</code></td><td>O(1) 查询</td></tr>
+        <tr><td>二维区间查询</td><td>大区域减多余区域、补回左上角</td><td><code>S[x2][y2]-S[x1-1][y2]-S[x2][y1-1]+S[x1-1][y1-1]</code></td><td>O(1) 查询</td></tr>
+        <tr><td>本质定位</td><td>快速求和，是枚举优化，常配贪心</td><td>枚举优化</td><td>—</td></tr>
+      </tbody>
+    </table></div></div>
+
+    <h2>4.3 练习任务</h2>
+    <div class="card"><div class="table-wrap"><table>
+      <thead><tr><th>内容</th><th>要点</th></tr></thead>
+      <tbody>
+        <tr><td>必做习题</td><td>海底高铁、积水面积、激光炸弹、加深矩形（检验前缀和掌握）</td></tr>
+        <tr><td>基础习题</td><td>排队接水、合并果子，尝试暴力 / 前缀和 / 数学三种实现</td></tr>
+        <tr><td>伪代码支持</td><td>合并果子优先队列伪代码同步提供</td></tr>
+      </tbody>
+    </table></div></div>
+
+    <h2>流程图 —— 贪心标准执行流程</h2>
+    <div class="card">
+      <div class="flow">
+        <div class="step"><span class="num">1</span><span><strong>开始</strong></span><span class="arrow">→</span></div>
+        <div class="step"><span class="num">2</span><span><strong>提取局部最优解</strong></span><span class="arrow">→</span></div>
+        <div class="step decision"><span class="num">3</span><span><strong>反证法验证</strong></span><span class="arrow">→</span></div>
+        <div class="step"><span class="num">✓</span><span>无法推翻 → <strong>策略成立，采用贪心方案</strong></span><span class="arrow">→</span></div>
+        <div class="step"><span class="num">4</span><span><strong>编码实现</strong></span><span class="arrow">→</span></div>
+        <div class="step"><span class="num">5</span><span><strong>结束</strong></span></div>
+      </div>
+      <div class="note">若反证发现漏洞：补充约束条件后回到第 2 步重新提取局部最优解。</div>
+    </div>
+
+    <h2>时序图 —— 合并果子（贪心 + 优先队列）</h2>
+    <div class="card">
+      <div class="flow">
+        <div class="step"><span class="num">1</span><span>程序 → 优先队列：<strong>将所有果子堆压入队列</strong></span><span class="arrow">→</span></div>
+        <div class="step"><span class="num">2</span><span>循环（剩余堆数 &gt; 1）：弹出重量最小的堆 A、次小的堆 B</span><span class="arrow">→</span></div>
+        <div class="step"><span class="num">3</span><span>程序合并：<strong>A + B</strong>，总体力 += (A+B)</span><span class="arrow">→</span></div>
+        <div class="step"><span class="num">4</span><span>将合并结果 <strong>压回优先队列</strong></span><span class="arrow">→</span></div>
+        <div class="step"><span class="num">5</span><span>循环结束 → <strong>输出最小总体力消耗</strong></span></div>
+      </div>
+    </div>
+
+    <h2>排队接水流程</h2>
+    <div class="card">
+      <div class="flow">
+        <div class="step"><span class="num">1</span><span>读取 n 个人的接水时长</span><span class="arrow">→</span></div>
+        <div class="step"><span class="num">2</span><span><strong>按接水时长升序排序</strong></span><span class="arrow">→</span></div>
+        <div class="step"><span class="num">3</span><span>从第一个人开始逐个累加等待时间</span><span class="arrow">→</span></div>
+        <div class="step"><span class="num">4</span><span><strong>输出最小总等待时间</strong></span></div>
+      </div>
+      <div class="tip">💡 大白话：排队接水 = 把接水时间短的人排前面（短者优先），再从第一个人开始逐个累加等待时间，总等待时间就最小。</div>
+    </div>
+
+    <nav class="chapter-grid" style="margin-top:24px;">
+      <a class="chapter-card" href="day2.html"><span class="tag">返回</span><h4>day2 首页</h4></a>
+      <a class="chapter-card" href="topics.html"><span class="tag">下一页</span><h4>day2 · 题目练习计划</h4></a>
+    </nav>
+  
+    <nav class="pager"><a class="pager-next" href="day2-night.html">下一页：day2 晚上 · 习题讲评 <span class="pg-ico">→</span></a></nav>
+  </main>
+
+  <footer class="site-footer">编程竞赛知识点与例题学习笔记</footer>
+  <script src="main.js"></script>
+</body>
+</html>

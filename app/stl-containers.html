@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>STL 容器与字符串操作专题 · 编程竞赛笔记</title>
+  <link rel="icon" type="image/x-icon" href="icon.ico">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="site-header">
+    <div class="inner">
+      <a class="brand" href="index.html"><img class="brand-ico" src="icon.ico" alt="">编程竞赛笔记</a>
+            <nav class="site-nav">
+        <a href="index.html">首页</a>
+        <a href="day1.html">day1</a>
+        <a href="day2.html">day2</a>
+        <a href="day3.html">day3</a>
+        <a href="dfs-bfs.html">day4</a>
+        <div class="nav-drop">
+          <span class="nav-drop-btn">其他 ▾</span>
+          <div class="drop-menu">
+            <a href="topics-basic.html">基础语法</a>
+            <a href="topics-algo.html">基础算法</a>
+            <a href="topics-string.html">字符串</a>
+            <a href="topics-dp.html">动态规划</a>
+            <a href="stl-containers.html" class="active">STL容器</a>
+            <a href="topics-graph.html">图论</a>
+            <a href="topics-math.html">数学</a>
+            <a href="topics-round.html">周赛题解</a>
+            <a href="topics-prelim.html">初赛篇</a>
+            <a href="summary.html">学习总结</a>
+          </div>
+        </div>
+      </nav>
+    </div>
+  </header>
+
+  <main class="main"><nav class="crumb"><a href="index.html">首页</a><span class="sep">›</span><span>STL 容器与字符串操作专题</span></nav>
+    <div class="hero"><span class="hero-ico">🧰</span><h1>STL 容器与字符串操作专题</h1><p class="subtitle">vector · stack · queue · set · map · 字符串常见操作（源自 PDF 手册整理）</p></div>
+
+    <h2>一、五大容器总览</h2>
+    <div class="card"><div class="table-wrap"><table>
+      <thead><tr><th>容器</th><th>底层结构</th><th>核心特性</th><th>时间复杂度</th></tr></thead>
+      <tbody>
+        <tr><td>vector</td><td>动态数组</td><td>随机访问、自动扩容</td><td>随机访问 O(1)</td></tr>
+        <tr><td>stack</td><td>适配器</td><td>先进后出 (LIFO)</td><td>push/pop O(1)</td></tr>
+        <tr><td>queue</td><td>适配器</td><td>先进先出 (FIFO)</td><td>push/pop O(1)</td></tr>
+        <tr><td>set</td><td>红黑树</td><td>有序不重复集合</td><td>增删查 O(log n)</td></tr>
+        <tr><td>map</td><td>红黑树</td><td>有序键值对</td><td>增删查 O(log n)</td></tr>
+      </tbody>
+    </table></div></div>
+
+    <h2>二、vector —— 动态数组</h2>
+    <div class="card"><div class="table-wrap"><table>
+      <thead><tr><th>操作</th><th>代码</th><th>复杂度</th></tr></thead>
+      <tbody>
+        <tr><td>尾部插入</td><td><code>v.push_back(x)</code> / 推荐 <code>v.emplace_back(x)</code></td><td>O(1) 均摊</td></tr>
+        <tr><td>尾部删除</td><td><code>v.pop_back()</code></td><td>O(1)</td></tr>
+        <tr><td>随机访问</td><td><code>v[i]</code> / <code>v.at(i)</code></td><td>O(1)</td></tr>
+        <tr><td>大小 / 判空</td><td><code>v.size()</code> / <code>v.empty()</code></td><td>O(1)</td></tr>
+        <tr><td>首 / 尾元素</td><td><code>v.front()</code> / <code>v.back()</code></td><td>O(1)</td></tr>
+        <tr><td>清空</td><td><code>v.clear()</code></td><td>O(n)</td></tr>
+        <tr><td>替换内容</td><td><code>v.assign(n, val)</code></td><td>O(n)</td></tr>
+        <tr><td>交换</td><td><code>v.swap(v2)</code></td><td>O(1)</td></tr>
+      </tbody>
+    </table></div>
+    <p class="lead">定义：<code>vector&lt;type&gt; v;</code>；二维 <code>vector&lt;vector&lt;int&gt;&gt; v(n, vector&lt;int&gt;(m,0))</code>。初始化：<code>v={1,2,3}</code>、<code>v(n+1)</code>（n+1 个 0）、<code>v(n,1)</code>（n 个 1）。遍历：下标 / <code>for(auto x:v)</code> / 迭代器。常用算法：<code>sort</code>（升/降序）、<code>reverse</code>、<code>lower_bound</code>。</p>
+    </div>
+
+    <h2>三、stack —— 栈（LIFO）</h2>
+    <div class="card"><div class="table-wrap"><table>
+      <thead><tr><th>操作</th><th>代码</th><th>说明</th></tr></thead>
+      <tbody>
+        <tr><td>入栈</td><td><code>stk.push(x)</code></td><td>元素加入栈顶</td></tr>
+        <tr><td>出栈</td><td><code>stk.pop()</code></td><td>删除栈顶（无返回值）</td></tr>
+        <tr><td>取栈顶</td><td><code>stk.top()</code></td><td>获取栈顶元素</td></tr>
+        <tr><td>大小 / 判空</td><td><code>stk.size()</code> / <code>stk.empty()</code></td><td>empty 为 true 表示空栈</td></tr>
+      </tbody>
+    </table></div>
+    <p class="lead">数组模拟栈：<code>int stk[N]; int top=0;</code> 入 <code>stk[++top]=x;</code> 出 <code>if(top&gt;0) top--;</code> 查 <code>if(top&gt;0) cout&lt;&lt;stk[top];</code> 清空 <code>top=0;</code>。⚠️ pop/top 前必须非空，否则 RE。</p>
+    <h3>应用场景</h3>
+    <div class="table-wrap"><table>
+      <thead><tr><th>场景</th><th>思路</th><th>要点</th></tr></thead>
+      <tbody>
+        <tr><td>括号匹配</td><td>左括号入栈，遇右括号弹栈比对</td><td>不匹配 / 栈空 / 结束栈非空 → 不合法</td></tr>
+        <tr><td>表达式求值（后缀）</td><td>遇数字入栈，遇运算符弹两个数运算后压回</td><td>后缀表达式天然适合栈</td></tr>
+        <tr><td>验证出栈序列</td><td>模拟入栈，栈顶等于出栈序列头则弹出</td><td>判断能否得到给定出栈序列</td></tr>
+        <tr><td>单调栈</td><td>维护栈内元素单调（递增 / 递减）</td><td>求左右第一个更大 / 更小元素</td></tr>
+      </tbody>
+    </table></div>
+    <p class="lead">推荐题单：括号匹配、后缀表达式求值、出栈序列合法性、柱状图中最大矩形（单调栈）、每日温度。</p>
+    </div>
+
+    <h2>四、queue —— 队列（FIFO）</h2>
+    <div class="card"><div class="table-wrap"><table>
+      <thead><tr><th>操作</th><th>代码</th><th>说明</th></tr></thead>
+      <tbody>
+        <tr><td>入队</td><td><code>q.push(x)</code></td><td>元素加入队尾</td></tr>
+        <tr><td>出队</td><td><code>q.pop()</code></td><td>删除队头（无返回值）</td></tr>
+        <tr><td>取队头 / 队尾</td><td><code>q.front()</code> / <code>q.back()</code></td><td>查看队首 / 队尾元素</td></tr>
+        <tr><td>大小 / 判空</td><td><code>q.size()</code> / <code>q.empty()</code></td><td>—</td></tr>
+      </tbody>
+    </table></div>
+    <p class="lead">数组模拟队列：<code>const int N=100010; int q[N]; int h=1,t=0;</code> 入 <code>q[++t]=x;</code> 出 <code>h++;</code> 队头 <code>q[h];</code> 队尾 <code>q[t];</code> 大小 <code>t-h+1;</code> 清空 <code>h=1,t=0;</code>。⚠️ front/back/pop 前必须非空。双端队列 deque：<code>push_front / push_back / pop_front / pop_back</code>（常数大，慎用）。应用：BFS、任务调度。</p>
+    </div>
+
+    <h2>五、set —— 有序集合</h2>
+    <div class="card"><div class="table-wrap"><table>
+      <thead><tr><th>操作</th><th>代码</th><th>说明</th></tr></thead>
+      <tbody>
+        <tr><td>插入</td><td><code>s.insert(x)</code></td><td>不存在则插入</td></tr>
+        <tr><td>存在查询</td><td><code>s.count(x)</code></td><td>存在返回 1，否则 0</td></tr>
+        <tr><td>查找迭代器</td><td><code>s.find(x)</code></td><td>不存在返回 end()</td></tr>
+        <tr><td>删除值 / 迭代器</td><td><code>s.erase(x)</code> / <code>s.erase(it)</code></td><td>—</td></tr>
+        <tr><td>最小值 / 最大值</td><td><code>*s.begin()</code> / <code>*s.rbegin()</code></td><td>取前先判空</td></tr>
+        <tr><td>二分</td><td><code>s.lower_bound(x)</code> / <code>s.upper_bound(x)</code></td><td>≥ x / &gt; x</td></tr>
+      </tbody>
+    </table></div>
+    <p class="lead">定义：<code>set&lt;int&gt; s;</code>、<code>set&lt;string&gt;</code>、<code>set&lt;pair&lt;int,int&gt;&gt;</code>、<code>set&lt;int&gt; s[100005];</code>；降序 <code>set&lt;int, greater&lt;&gt;&gt; s;</code>。⚠️ 键类型须支持 &lt; 运算符；自定义类型需比较函数；迭代器操作前判空否则 RE。变种：multiset（可重复）、unordered_set（无序 O(1)）。</p>
+    </div>
+
+    <h2>六、map —— 有序键值对</h2>
+    <div class="card"><div class="table-wrap"><table>
+      <thead><tr><th>操作</th><th>代码</th><th>说明</th></tr></thead>
+      <tbody>
+        <tr><td>插入 / 修改</td><td><code>mp[x] = y;</code></td><td>键不存在则插入，否则修改</td></tr>
+        <tr><td>键存在查询</td><td><code>mp.count(x)</code></td><td>存在返回 1，否则 0</td></tr>
+        <tr><td>删除键</td><td><code>mp.erase(x)</code></td><td>删除键为 x 的元素</td></tr>
+        <tr><td>键值数量 / 清空</td><td><code>mp.size()</code> / <code>mp.clear()</code></td><td>—</td></tr>
+      </tbody>
+    </table></div>
+    <p class="lead">定义：<code>map&lt;key_type, value_type&gt; mp;</code>；如 <code>map&lt;string,int&gt;</code>、二维 <code>map&lt;int,map&lt;int,int&gt;&gt;</code>。遍历推荐 <code>for(auto it:mp) it.first / it.second</code>。典型应用：频次统计（元素小用数组 cnt[x]++，范围大 / 字符串用 map）。⚠️ 键类型须支持 &lt; 运算符。变种：unordered_map（无序 O(1)，不支持二分）、multimap（键可重复）。</p>
+    </div>
+
+    <h2>七、速记口诀</h2>
+    <div class="card"><p class="lead">
+      <b>vector</b>：动态数组，尾部插入最快，随机访问 O(1)<br>
+      <b>stack</b>：弹夹模型，先进后出，只碰栈顶<br>
+      <b>queue</b>：排队模型，先进先出，只碰两头<br>
+      <b>set</b>：自动排序，不重复，红黑树 O(log n)<br>
+      <b>map</b>：键值对，键唯一，自动按键排序
+    </p></div>
+
+    <h2>八、字符串常见操作</h2>
+    <div class="card"><div class="table-wrap"><table>
+      <thead><tr><th>分类</th><th>代码示例</th><th>说明</th></tr></thead>
+      <tbody>
+        <tr><td>插入</td><td><code>s.insert(2,"kk")</code></td><td>索引 2 处插入</td></tr>
+        <tr><td>删除</td><td><code>s.erase(2,2)</code> / <code>s.erase(2)</code></td><td>从索引 2 删 2 个 / 删到末尾</td></tr>
+        <tr><td>替换</td><td><code>s.replace(2,2,"KK")</code></td><td>替换从索引 2 开始 2 个字符</td></tr>
+        <tr><td>反转</td><td><code>std::reverse(s.begin(),s.end())</code></td><td>原地反转，需 &lt;algorithm&gt;</td></tr>
+        <tr><td>数值转换</td><td><code>stoi / stol / stoll</code>、<code>to_string(x)</code></td><td>字符串↔数值，可指定进制</td></tr>
+        <tr><td>查找</td><td><code>find / rfind / find_first_of / find_last_of</code></td><td>从前往后 / 从后往前查找</td></tr>
+        <tr><td>截取 / 比较</td><td><code>s.substr(2,3)</code>、<code>s1.compare(s2)</code></td><td>截取子串、比较大小</td></tr>
+        <tr><td>分割</td><td><code>istringstream + getline(iss,token,',')</code></td><td>按分隔符取子串，需 &lt;sstream&gt;</td></tr>
+        <tr><td>大小写</td><td><code>transform(... , ::toupper/::tolower)</code></td><td>需 &lt;algorithm&gt;</td></tr>
+        <tr><td>拼接 / 容量</td><td><code>s.append(x)</code>、<code>s += x</code>、<code>reserve()</code></td><td>拼接、预留空间</td></tr>
+        <tr><td>C++17</td><td><code>starts_with / ends_with / contains</code></td><td>前缀 / 后缀 / 包含判断</td></tr>
+      </tbody>
+    </table></div>
+    <p class="lead">索引从 0 开始。头文件：位置索引 &lt;string&gt;、反转 / 大小写 &lt;algorithm&gt;、字符串流 &lt;sstream&gt;。数值转换需 try-catch 捕获异常；越界访问抛 std::out_of_range。</p>
+    </div>
+
+    <h2>九、更多 STL 容器（专题补充）</h2>
+    <div class="card">
+      <h3>pair —— 二元组</h3>
+      <div class="table-wrap"><table>
+        <thead><tr><th>操作</th><th>代码</th><th>说明</th></tr></thead>
+        <tbody>
+          <tr><td>定义</td><td><code>pair&lt;int,int&gt; p;</code> / <code>p={a,b}</code></td><td>两个元素的组合</td></tr>
+          <tr><td>访问</td><td><code>p.first</code> / <code>p.second</code></td><td>第一 / 第二元素</td></tr>
+          <tr><td>比较 / 排序</td><td>自动按 first 再 second 比较</td><td>常用于存坐标、捆绑排序</td></tr>
+        </tbody>
+      </table></div>
+      <h3>array —— 定长数组</h3>
+      <div class="table-wrap"><table>
+        <thead><tr><th>操作</th><th>代码</th><th>说明</th></tr></thead>
+        <tbody>
+          <tr><td>定义</td><td><code>array&lt;int,N&gt; a;</code></td><td>定长 N 的数组</td></tr>
+          <tr><td>访问</td><td><code>a[i]</code> / <code>a.at(i)</code></td><td>at 越界抛异常</td></tr>
+          <tr><td>大小 / 填充</td><td><code>a.size()</code> / <code>a.fill(x)</code></td><td>统一填充</td></tr>
+        </tbody>
+      </table></div>
+      <h3>list —— 双向链表</h3>
+      <div class="table-wrap"><table>
+        <thead><tr><th>操作</th><th>代码</th><th>说明</th></tr></thead>
+        <tbody>
+          <tr><td>定义</td><td><code>list&lt;int&gt; l;</code></td><td>双向链表</td></tr>
+          <tr><td>前后插入 / 删除</td><td><code>push_front/back</code>、<code>pop_front/back</code></td><td>O(1)</td></tr>
+          <tr><td>任意插入</td><td><code>insert(pos, x)</code></td><td>需迭代器定位</td></tr>
+          <tr><td>特色操作</td><td><code>merge</code>、<code>unique</code>、<code>sort</code></td><td>合并 / 去重 / 排序</td></tr>
+        </tbody>
+      </table></div>
+      <h3>iterator —— 迭代器</h3>
+      <div class="table-wrap"><table>
+        <thead><tr><th>操作</th><th>代码</th><th>说明</th></tr></thead>
+        <tbody>
+          <tr><td>首 / 尾</td><td><code>begin()</code> / <code>end()</code></td><td>end 指向最后一个的后一位</td></tr>
+          <tr><td>遍历</td><td><code>for(auto it=c.begin(); it!=c.end(); ++it)</code></td><td>*it 取值</td></tr>
+          <tr><td>反向</td><td><code>rbegin()</code> / <code>rend()</code></td><td>从后往前</td></tr>
+        </tbody>
+      </table></div>
+      <h3>bitset —— 位集</h3>
+      <div class="table-wrap"><table>
+        <thead><tr><th>操作</th><th>代码</th><th>说明</th></tr></thead>
+        <tbody>
+          <tr><td>定义</td><td><code>bitset&lt;N&gt; b;</code></td><td>N 位二进制位集</td></tr>
+          <tr><td>置位 / 清位</td><td><code>b.set(i)</code> / <code>b.reset(i)</code></td><td>—</td></tr>
+          <tr><td>翻转 / 计数</td><td><code>b.flip()</code> / <code>b.count()</code></td><td>翻转 / 统计 1 的个数</td></tr>
+          <tr><td>位运算</td><td><code>b1 &amp; b2</code> / <code>|</code> / <code>^</code> / <code>&lt;&lt;</code></td><td>支持整组位运算</td></tr>
+        </tbody>
+      </table></div>
+      <h3>priority_queue —— 优先队列</h3>
+      <div class="table-wrap"><table>
+        <thead><tr><th>操作</th><th>代码</th><th>说明</th></tr></thead>
+        <tbody>
+          <tr><td>定义（大根堆）</td><td><code>priority_queue&lt;int&gt; pq;</code></td><td>默认堆顶最大</td></tr>
+          <tr><td>小根堆</td><td><code>priority_queue&lt;int, vector&lt;int&gt;, greater&lt;int&gt;&gt; pq;</code></td><td>堆顶最小</td></tr>
+          <tr><td>入队 / 出队 / 取顶</td><td><code>push(x)</code> / <code>pop()</code> / <code>top()</code></td><td>O(log n)</td></tr>
+          <tr><td>判空 / 大小</td><td><code>empty()</code> / <code>size()</code></td><td>—</td></tr>
+        </tbody>
+      </table></div>
+      <p class="lead">参照专题网站 STL 容器分类补充整理。</p>
+    </div>
+
+    <nav class="chapter-grid" style="margin-top:24px;">
+      <a class="chapter-card" href="day2-stl.html"><span class="tag">上一页</span><h4>day2 · 上午 —— STL 核心知识点</h4></a>
+      <a class="chapter-card" href="index.html"><span class="tag">返回</span><h4>返回首页</h4></a>
+    </nav>
+
+    <nav class="pager"><a class="pager-next" href="index.html">返回首页 <span class="pg-ico">→</span></a></nav>
+  </main>
+
+  <footer class="site-footer">编程竞赛知识点与例题学习笔记</footer>
+  <script src="main.js"></script>
+</body>
+</html>
